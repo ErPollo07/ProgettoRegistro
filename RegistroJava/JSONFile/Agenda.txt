@@ -1,0 +1,22 @@
+This is the structure that the Agenda.json file must have.
+Every class is an object, and it has every date with something in.
+
+
+{
+  "classroom": {
+    "data": [
+      "arg1",
+      "arg2"
+    ],
+    "data2": [
+      "arg1",
+      "arg2",
+      "arg3"
+    ]
+  },
+  "classroom2":
+    "data": [
+      "arg1",
+    ]
+  }
+}

@@ -5,6 +5,7 @@ public class Teacher extends User {
 
     private String subject;
 
+    /* CONSTRUCTOR */
     Teacher(String username, String password, String subject) {
         super(username, password);
         this.subject = subject;

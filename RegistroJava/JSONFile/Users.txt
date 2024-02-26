@@ -1,0 +1,72 @@
+This is the structure that the Users.json file
+
+{
+  "students": [
+    {
+      "id": "idValue",
+      "name": "name",
+      "surname": "surname",
+      "parent": "parentId",
+      "address": {
+        "street": "streetName",
+        "city": "cityName",
+        "cap": "cap"
+      },
+      "class": "3E",
+      "marks": {
+        "math": [1,2,3,4],
+        "italian": [1,2,3,4,5,6],
+        "informatics": [1,2,3]
+      }
+    }
+  ],
+  "parent": [
+    {
+      "id": "idValue",
+      "name": "name",
+      "surname": "surname",
+      "child": "childId",
+      "address": {
+        "street": "streetName",
+        "city": "cityName",
+        "cap": "cap"
+      },
+      "interviews": [
+        {
+          "profName": "profName",
+          "subject": "subject"
+        },
+        {
+          "profName": "profName",
+          "subject": "subject"
+        }
+      ]
+    }
+  ],
+  "teachers": [
+    {
+      "id": "idValue",
+      "name": "name",
+      "surname": "surname",
+      "address": {
+        "street": "streetName",
+        "city": "cityName",
+        "cap": "cap"
+      },
+      "subject": "subject",
+      "classes": ["3E", "4F", "1C"]
+    }
+  ],
+  "admin": [
+    {
+      "id": "idValue",
+      "name": "name",
+      "surname": "surname",
+      "address": {
+        "street": "streetName",
+        "city": "cityName",
+        "cap": "cap"
+      }
+    }
+  ]
+}
