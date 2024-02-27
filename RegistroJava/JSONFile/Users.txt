@@ -1,4 +1,13 @@
 This is the structure that the Users.json file
+Every type of user have is an array of object, every object of that array is a user.
+Every student:
+    id, name, surname, parentId, address[street, city, cap], classroom, marks
+Every parent has:
+    id, name, surname, childId, address[street, city, cap], interviews[{profName, subject}, ...]
+Every teacher has:
+    id, name, surname, address[street, city, cap], subject, classes[classroom, ...]
+Every admin has:
+    id, name, surname, address[street, city, cap]
 
 {
   "students": [
@@ -12,7 +21,7 @@ This is the structure that the Users.json file
         "city": "cityName",
         "cap": "cap"
       },
-      "class": "3E",
+      "classroom": "3E",
       "marks": {
         "math": [1,2,3,4],
         "italian": [1,2,3,4,5,6],
@@ -20,7 +29,7 @@ This is the structure that the Users.json file
       }
     }
   ],
-  "parent": [
+  "parents": [
     {
       "id": "idValue",
       "name": "name",
@@ -57,7 +66,7 @@ This is the structure that the Users.json file
       "classes": ["3E", "4F", "1C"]
     }
   ],
-  "admin": [
+  "admins": [
     {
       "id": "idValue",
       "name": "name",
