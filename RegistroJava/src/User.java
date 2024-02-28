@@ -20,5 +20,23 @@ public class User {
         return "";
     }
 
+    /**
+     * Set a new password
+     * @param pw new password
+     */
+    public void setPassword(String pw) {
+    }
 
+    /**
+     * Get the password of the user with the id equals to first param
+     * Check if the userId is an id of an admin.
+     * If the id isn't an id of an admin check if the id and the userId (both the param) is equal,
+     * if the condition is true return the password
+     * @param id
+     * @param userId
+     * @return retun the password if
+     */
+    public String getPassword(String id, String userId) {
+        return "";
+    }
 }
