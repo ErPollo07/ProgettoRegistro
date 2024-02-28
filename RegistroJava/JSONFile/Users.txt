@@ -1,18 +1,19 @@
 This is the structure that the Users.json file
 Every type of user have is an array of object, every object of that array is a user.
 Every student:
-    id, name, surname, parentId, address[street, city, cap], classroom, marks
+    id, name, surname, password, parentId, address[street, city, cap], classroom, marks
 Every parent has:
-    id, name, surname, childId, address[street, city, cap], interviews[{profName, subject}, ...]
+    id, name, surname, password, childId, address[street, city, cap], interviews[{profName, subject}, ...]
 Every teacher has:
-    id, name, surname, address[street, city, cap], subject, classes[classroom, ...]
+    id, name, surname, password, address[street, city, cap], subject, classes[classroom, ...]
 Every admin has:
-    id, name, surname, address[street, city, cap]
+    id, name, surname, password, address[street, city, cap]
 
 {
   "students": [
     {
       "id": "idValue",
+      "password": "pw",
       "name": "name",
       "surname": "surname",
       "parent": "parentId",
@@ -32,6 +33,7 @@ Every admin has:
   "parents": [
     {
       "id": "idValue",
+      "password": "pw",
       "name": "name",
       "surname": "surname",
       "child": "childId",
@@ -55,6 +57,7 @@ Every admin has:
   "teachers": [
     {
       "id": "idValue",
+      "password": "pw",
       "name": "name",
       "surname": "surname",
       "address": {
@@ -69,6 +72,7 @@ Every admin has:
   "admins": [
     {
       "id": "idValue",
+      "password": "pw",
       "name": "name",
       "surname": "surname",
       "address": {
