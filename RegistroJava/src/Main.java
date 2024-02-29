@@ -18,7 +18,7 @@ public class Main {
         do {
             switch (scelta) {
                 case 1:
-                    access();
+                    access(scanner);
                     verify=true;
                     break;
 
@@ -44,6 +44,7 @@ public class Main {
         String id;
         System.out.println("Inserisci id: \n");
         id=scanner.next();
+
 
 
     }

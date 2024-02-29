@@ -1,6 +1,23 @@
 {
   "students": [
-    {}
+    {
+      "id": "S0000001",
+      "password": "pw",
+      "name": "name",
+      "surname": "surname",
+      "parent": "parentId",
+      "address": {
+        "street": "streetName",
+        "city": "cityName",
+        "cap": "cap"
+      },
+      "classroom": "3E",
+      "marks": {
+        "math": [1,2,3,4],
+        "italian": [1,2,3,4,5,6],
+        "informatics": [1,2,3]
+      }
+    }
   ],
   "parent": [
     {}
