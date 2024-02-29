@@ -1,0 +1,12 @@
+The structure Lessons.json file
+
+{
+  "classroom": {
+    "date": {
+      "subject": [
+        "arg1",
+        "arg2"
+      ]
+    }
+  }
+}
