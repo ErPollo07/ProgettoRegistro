@@ -24,34 +24,22 @@ public class Teacher extends User {
     }
 
     /**
-     * This method inserts an argument of a lesson in the specified subject,
-     * in the specified date, in the specified classroom in the file Lessons.json
+     * If I put the classroom = "3E", the date = "20/2/2024" the hour = "3".
+     * If in the Lessons.json there is:
      *
-     * @param classroom the classroom that we want to access
-     * @param date      the date where we want to write the lessons
-     * @param subject   The subject of the lessons
-     * @param arg       the argument of the lesson
-     */
-    public void setLesson(String classroom, String date, String subject, String arg) {
-
-    }
-
-    /**
      *
      * @param classroom
      * @param date
-     * @param subject
-     * @return
      */
-    public String[] getLesson(String classroom, String date, String subject) {
-        return new String[1];
+    public void setLessons(String classroom, String date, String hour) {
     }
 
     /**
+     * If I put the classroom = "3E" e date = "20/2/2024" the method return all the lessons of the 3E in date 20/2/2024
      *
      * @param classroom
      * @param date
-     * @return
+     * @return all the lessons in a centain classroom in the speciied date
      */
     public String[][] getLesson(String classroom, String date) {
         return new String[1][1];
