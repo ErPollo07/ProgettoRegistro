@@ -9,7 +9,8 @@ public class Administrator extends User {
     }
 
     /**
-     * This method allows you to view the teachers belonging to a class
+     * This method allows you to view the list of the teachers in the school
+     * @return
      */
     public String[] getTeacher(){
         return new String[1];
@@ -17,9 +18,10 @@ public class Administrator extends User {
 
     /**
      * allows you to enter grades for a single student.
+     *
      */
-    public double[] setGrade(){
-        return new double[1];
+    public void setGrade(String studentId) {
+
     }
 
     /**
