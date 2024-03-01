@@ -12,11 +12,15 @@
         "cap": "cap"
       },
       "classroom": "3E",
-      "marks": {
+      "grades": {
         "math": [1,2,3,4],
         "italian": [1,2,3,4,5,6],
         "informatics": [1,2,3]
-      }
+      },
+      "notes": [
+        "arg1",
+        "arg2"
+      ]
     }
   ],
   "parent": [
