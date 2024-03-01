@@ -1,5 +1,19 @@
 public class User {
 
+    public String userId;
+    public String name;
+    public String surname;
+    public String password;
+    public String parentId;
+    public String childId;
+    public String[] address;
+    public String classroom;
+    public String grades;
+    public String notes;
+    public String[][] interviews;
+    public String subject;
+    public String[] classrooms;
+
     /**
      * Set a new name for the user with id equals to the first param
      * Es - My name is "nicola" in file User.json, if I call the function

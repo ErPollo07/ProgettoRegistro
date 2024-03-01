@@ -23,13 +23,56 @@
       ]
     }
   ],
-  "parent": [
-    {}
+  "parents": [
+    {
+      "id": "idValue",
+      "password": "pw",
+      "name": "name",
+      "surname": "surname",
+      "child": "childId",
+      "address": {
+        "street": "streetName",
+        "city": "cityName",
+        "cap": "cap"
+      },
+      "interviews": [
+        {
+          "profName": "profName",
+          "subject": "subject"
+        },
+        {
+          "profName": "profName",
+          "subject": "subject"
+        }
+      ]
+    }
   ],
-  "teacher": [
-    {}
+  "teachers": [
+    {
+      "id": "idValue",
+      "password": "pw",
+      "name": "name",
+      "surname": "surname",
+      "address": {
+        "street": "streetName",
+        "city": "cityName",
+        "cap": "cap"
+      },
+      "subject": "subject",
+      "classrooms": ["3E", "4F", "1C"]
+    }
   ],
-  "admin": [
-    {}
+  "admins": [
+    {
+      "id": "idValue",
+      "password": "pw",
+      "name": "name",
+      "surname": "surname",
+      "address": {
+        "street": "streetName",
+        "city": "cityName",
+        "cap": "cap"
+      }
+    }
   ]
 }
