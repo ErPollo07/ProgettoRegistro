@@ -1,66 +1,97 @@
 public class Administrator {
-
     /***
-     * viewClass: visualizza elenco degli studenti di una classe
-     * viewTeacher: visualizza elenco degli insegnanti
-     * setGrade: permette di inserire i voti a un singolo studente.
-     * viewGrade: permette di vedere i voti di uno studente.
-     * insertLessons: permette di inserire gli argomenti delle lezioni.
-     * viewLessosns: permette di visualizzare i le lezioni svolte.
-     * viewNoticeBoard: metodo che consente di visualizzare la bacheca.
-     * viewEvents: metodo che consente di visualizzare gli eventi in programma.
-     * viewAgenda: permette di visualizzare i contenuti dell’agenda
-     * setAgendaNote: permette di inserire compiti, verifiche.
-     * viewDocuments: metodo che consente di visualizzare i documenti.
-     * viewSchoolReport: permette di visualizzare le pagelle
-     * viewFiles: Visualizzazione dei file all’interno della bacheca.
+     * these are the methods mainly used by the administrator
      * @return
      */
 
+
     public String[] getClassStudent(){
         return new String[1];
+        /***
+         * This method allows you to view the first and last names of a class of students
+         */
     }
     public String[] getTeacher(){
         return new String[1];
+        /***
+         * This method allows you to view the teachers belonging to a class
+         */
     }
 
     public double[] setGrade(){
         return new double[1];
+        /***
+         * allows you to enter grades for a single student.
+         */
+
     }
 
     public double[] getGrade(){
         return new double[1];
+        /***
+         * viewGrade: allows you to see a student's grades.
+         */
+
     }
 
     public String[] setLessons(){
         return new String[1];
+        /***
+         * method that allows us to insert lessons
+         */
     }
 
     public String[] getLessons(){
         return new String[1];
+        /***
+         *  allows you to view the lessons completed.
+         */
     }
 
     public String[] getNoticeBoard(){
         return new String[1];
+        /***
+         *  method that allows you to view the notice board.
+         */
     }
     public String[] getEvents(){
         return new String[1];
+        /***
+         *  method that allows you to view scheduled events.
+         */
+
     }
     public String[] setAgenda(){
         return new String[1];
+        /***
+         *  setAgendaNote: allows you to insert tasks and checks.
+         */
     }
     public String[] getAgenda(){
         return new String[1];
+        /***
+         *  allows you to view the contents of the agenda
+         */
     }
     public String[] getDocuments(){
         return new String[1];
+        /***
+         *  method that allows you to view documents.
+         */
     }
 
     public String[] getSchoolReport(){
         return new String[1];
+        /***
+         * allows you to view report cards
+         */
     }
+
     public String[] getFiles(){
         return new String[1];
+        /***
+         * View files within the board.
+         */
     }
 
 
