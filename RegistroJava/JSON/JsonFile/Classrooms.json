@@ -1,0 +1,14 @@
+{
+  "classroom": [
+    {
+      "studentId": "id",
+      "name": "name",
+      "surname": "surname"
+    },
+    {
+      "studentId": "id",
+      "name": "name",
+      "surname": "surname"
+    }
+  ]
+}

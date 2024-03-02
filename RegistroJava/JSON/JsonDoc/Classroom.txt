@@ -1,0 +1,16 @@
+This is the structure of the Classroom.json file
+
+{
+  "classroom": [
+    {
+      "studentId": "id",
+      "name": "name",
+      "surname": "surname"
+    },
+    {
+      "studentId": "id",
+      "name": "name",
+      "surname": "surname"
+    }
+  ]
+}
