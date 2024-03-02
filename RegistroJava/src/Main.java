@@ -37,7 +37,12 @@ public class Main {
      * @param scanner scanner
      */
     private static void access(Scanner scanner) {
-        System.out.println("access");
+        System.out.println("===Accedi===");
+        System.out.println("Inserisci il codice personale o l'username della scuola: ");
+        System.out.println("->\t");
+
+        System.out.println("Inserisci la password:\n ");
+
     }
 
     /**
