@@ -5,12 +5,12 @@
       "password": "pw",
       "name": "name",
       "surname": "surname",
-      "parent": "parentId",
       "address": {
         "street": "streetName",
         "city": "cityName",
         "cap": "cap"
       },
+      "parent": "parentId",
       "classroom": "3E",
       "grades": {
         "math": [1,2,3,4],
@@ -29,12 +29,12 @@
       "password": "pw",
       "name": "name",
       "surname": "surname",
-      "child": "childId",
       "address": {
         "street": "streetName",
         "city": "cityName",
         "cap": "cap"
       },
+      "child": "childId",
       "interviews": [
         {
           "profName": "profName",
