@@ -1,0 +1,24 @@
+[
+  {
+    "id": "idValue",
+    "password": "pw",
+    "name": "name",
+    "surname": "surname",
+    "address": {
+      "street": "streetName",
+      "city": "cityName",
+      "cap": "cap"
+    },
+    "child": "childId",
+    "interviews": [
+      {
+        "profName": "profName",
+        "subject": "subject"
+      },
+      {
+        "profName": "profName",
+        "subject": "subject"
+      }
+    ]
+  }
+]

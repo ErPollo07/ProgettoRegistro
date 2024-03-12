@@ -1,0 +1,13 @@
+[
+  {
+    "id": "idValue",
+    "password": "pw",
+    "name": "name",
+    "surname": "surname",
+    "address": {
+      "street": "streetName",
+      "city": "cityName",
+      "cap": "cap"
+    }
+  }
+]
