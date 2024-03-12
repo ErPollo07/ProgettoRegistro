@@ -1,0 +1,1 @@
+In this directory there are all the files that are uploaded in the notice board
