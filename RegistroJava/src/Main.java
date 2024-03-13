@@ -5,11 +5,12 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
 
-    static JSONObject userJson = new JSONObject();
+    static JSONArray userJsonArray = new JSONArray();
     static JSONObject agendaJson = new JSONObject();
 
     public static void main(String[] args) {
@@ -26,10 +27,25 @@ public class Main {
 
         };
 
+        String i_id, i_password;
+        boolean invalidLogin = false;
+
         // Switch the integer returned by printMenu method
         switch (printMenu(accessMenu)) {
             case 1:
-                access(scanner);
+                do {
+                    System.out.println("inserisci il tuo username o id : ");
+                    i_id = scanner.nextLine();
+
+                    System.out.println("inserisci la tua password : ");
+                    i_password = scanner.nextLine();
+
+                    // If the user inserts an incorrect id or password, tell him.
+                    if (!(invalidLogin = access(i_id, i_password))) {
+                        System.out.println("You insert an incorrect id or password");
+                    }
+                } while (!invalidLogin);
+
                 break;
             case 2:
                 register(scanner);
@@ -42,43 +58,60 @@ public class Main {
     /**
      * Method to login in the register
      *
-     * @param scanner scanner
+     * @param i_id
+     * @param i_password
      */
-    private static void access(Scanner scanner) {
-        String id;
-        String password;
+    private static boolean access(String i_id, String i_password) {
         String filePath = "";
 
-        System.out.println("===Accedi===");
-        System.out.println("Inserisci il codice personale o l'username della scuola: ");
-        System.out.println("-> ");
-
-        id = scanner.nextLine();
-
-        System.out.println("Inserisci la password:\n ");
-
-        password = scanner.nextLine();
-
-        // Check what type of user is
-        if (id.charAt(0) == 'S') {
+        // Check what type of user is and read the correct file
+        if (i_id.charAt(0) == 's') {
             filePath = "JSON/JsonFile/User/Students.json";
+            readJsonFile(filePath);
+        }
+        else if (i_id.charAt(0) == 't') {
+            filePath = "JSON/JsonFile/User/Teachers.json";
+            readJsonFile(filePath);
+        }
+        else if (i_id.charAt(0) == 'p') {
+            filePath = "JSON/JsonFile/User/Parents.json";
+            readJsonFile(filePath);
+        }
+        else if (i_id.charAt(0) == 'a') {
+            filePath = "JSON/JsonFile/User/Administrators.json";
             readJsonFile(filePath);
         }
 
         // Search in the file of the user type
         // if there is a user with id equal to what the user putted and the password equal to what the user putted
-        verifyAccess();
-
-
-        // if there isn't a user with the id or password equal to what the user putted
+        return verifyAccess(i_id, i_password);
     }
 
     /**
      * Search in the file of the user type
      * if there is a user with id equal to what the user putted and the password equal to what the user putted.
      */
-    private static void verifyAccess() {
+    private static boolean verifyAccess(String i_id, String i_password) {
+        // Search for every user id in file userJson
+        // if there is one user that has the same id as i_id then check it's password
+        // if the password doesn't match continue to search, else stop the search
+        JSONObject singleUser;
 
+        for (Object o : userJsonArray) {
+            // get the user obj
+            singleUser = (JSONObject) o;
+            System.out.println(singleUser.get("id"));
+            System.out.println(singleUser.get("password"));
+
+            // Check if there is a user with id equal to i_id and password equal to i_password
+            if (Objects.equals((String) singleUser.get("id"), i_id) &&
+                    Objects.equals((String) singleUser.get("password"), i_password)) {
+                System.out.println("giusto");
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static void readJsonFile(String fileName) {
@@ -90,7 +123,7 @@ public class Main {
             Object obj = jsonParser.parse(fileReader);
             // assign to the JSONObject (global variable)
             // the file which we want ot extract information from
-            userJson = (JSONObject) obj;
+            userJsonArray = (JSONArray) obj;
         } catch (IOException | ParseException e) {
             System.out.println("C'e' stato un problema con i file di accesso. Ci scusiamo per il disagio");
         }
