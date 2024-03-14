@@ -10,8 +10,9 @@ import java.util.Scanner;
 
 public class Main {
 
-    static JSONArray userJsonArray = new JSONArray();
-    static JSONObject agendaJson = new JSONObject();
+    static JSONArray usersJsonArray = new JSONArray(); // the file os users. Es: Students, Teachers, ...
+    static JSONObject agendaJson = new JSONObject(); // the file of the agenda
+    static JSONObject classroomsJson = new JSONObject(); // the file of the classroom with all the students
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -46,9 +47,11 @@ public class Main {
                     }
                 } while (!invalidLogin);
 
+                System.out.println("Accesso eseguito!");
+
                 break;
             case 2:
-                register(scanner);
+                //register();
                 break;
         }
 
@@ -97,7 +100,8 @@ public class Main {
         // if the password doesn't match continue to search, else stop the search
         JSONObject singleUser;
 
-        for (Object o : userJsonArray) {
+        // Cycle for every user saved in the file usersJsonArray
+        for (Object o : usersJsonArray) {
             // get the user obj
             singleUser = (JSONObject) o;
             System.out.println(singleUser.get("id"));
@@ -106,11 +110,11 @@ public class Main {
             // Check if there is a user with id equal to i_id and password equal to i_password
             if (Objects.equals((String) singleUser.get("id"), i_id) &&
                     Objects.equals((String) singleUser.get("password"), i_password)) {
-                System.out.println("giusto");
                 return true;
             }
         }
 
+        // If there isn't a user with the id == i_id and password == i_password return false
         return false;
     }
 
@@ -123,7 +127,7 @@ public class Main {
             Object obj = jsonParser.parse(fileReader);
             // assign to the JSONObject (global variable)
             // the file which we want ot extract information from
-            userJsonArray = (JSONArray) obj;
+            usersJsonArray = (JSONArray) obj;
         } catch (IOException | ParseException e) {
             System.out.println("C'e' stato un problema con i file di accesso. Ci scusiamo per il disagio");
         }
@@ -132,9 +136,11 @@ public class Main {
     /**
      * This method permits the new user to create an account.
      *
-     * @param scanner scanner
+     * @param typeOfUser
+     * @param name
+     * @param surname
      */
-    private static void register(Scanner scanner) {
+    private static void register(String typeOfUser,String name, String surname) {
         System.out.println("register");
     }
 
