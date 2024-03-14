@@ -5,6 +5,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -35,8 +36,17 @@ public class Main {
         switch (printMenu(accessMenu)) {
             case 1:
                 do {
-                    System.out.println("inserisci il tuo username o id : ");
-                    i_id = scanner.nextLine();
+                    do {
+                        System.out.println("inserisci il tuo username o id : ");
+                        i_id = scanner.nextLine().toLowerCase();
+
+                        if (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
+                                i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a') {
+                            System.out.println("L'id che hai inserito non e' valido. Riprova.");
+                        }
+
+                    } while (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
+                            i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a');
 
                     System.out.println("inserisci la tua password : ");
                     i_password = scanner.nextLine();
@@ -67,22 +77,19 @@ public class Main {
     private static boolean access(String i_id, String i_password) {
         String filePath = "";
 
-        // Check what type of user is and read the correct file
-        if (i_id.charAt(0) == 's') {
-            filePath = "JSON/JsonFile/User/Students.json";
-            readJsonFile(filePath);
-        }
-        else if (i_id.charAt(0) == 't') {
-            filePath = "JSON/JsonFile/User/Teachers.json";
-            readJsonFile(filePath);
-        }
-        else if (i_id.charAt(0) == 'p') {
-            filePath = "JSON/JsonFile/User/Parents.json";
-            readJsonFile(filePath);
-        }
-        else if (i_id.charAt(0) == 'a') {
-            filePath = "JSON/JsonFile/User/Administrators.json";
-            readJsonFile(filePath);
+        switch (i_id.charAt(0)) {
+            case 's':
+                filePath = "JSON/JsonFile/User/Students.json";
+                readJsonFile(filePath);
+            case 't':
+                filePath = "JSON/JsonFile/User/Teachers.json";
+                readJsonFile(filePath);
+            case 'p':
+                filePath = "JSON/JsonFile/User/Parents.json";
+                readJsonFile(filePath);
+            case 'a':
+                filePath = "JSON/JsonFile/User/Administrators.json";
+                readJsonFile(filePath);
         }
 
         // Search in the file of the user type
