@@ -192,3 +192,8 @@ public class Main {
         return choiceMenu;
     }
 }
+
+
+/* CHANGE LOG
+14/3/2024 Nicola Done access method, which use verifyAccess to verify if the user exists.
+*/
