@@ -28,8 +28,23 @@ public class Main {
                 "[2] - Registrati"
         };
 
-        String[] principalMenu = {
+        String[] studentPrincipalMenu = {
 
+        };
+
+        String[] parentPrincipalMenu = {
+
+        };
+
+        String[] teacherPrincipalMenu = {
+
+        };
+
+        String[] adminPrincipalMenu = {
+                "MENU PRINCIPALE",
+                "[1] - Visualizza gli studenti di una classe",
+                "[2] - Visualizza elenco insegnanti",
+                "[3] - Crea nuovo utente"
         };
 
         String i_id, i_password;
@@ -78,7 +93,21 @@ public class Main {
                 // Do stuff of the teacher
                 break;
             case UserType.admin:
-                // Do stuff of the admin
+
+                switch (printMenu(adminPrincipalMenu)) {
+                    case 1:
+                        // Visualizza gli studenti di una classe
+                        break;
+                    case 2:
+                        // Visualizza elenco insegnanti
+                        break;
+                    case 3:
+                        // Crea nuovo utente
+                        break;
+                    default:
+                        System.out.println("NOT VALID OPTION");
+                }
+
                 break;
         }
     }
