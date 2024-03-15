@@ -15,6 +15,9 @@ public class Main {
     static JSONObject agendaJson = new JSONObject(); // the file of the agenda
     static JSONObject classroomsJson = new JSONObject(); // the file of the classroom with all the students
 
+    static enum UserType {student, parent, teacher, admin};
+    static UserType userType;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -32,40 +35,52 @@ public class Main {
         String i_id, i_password;
         boolean invalidLogin = false;
 
-        // Switch the integer returned by printMenu method
-        switch (printMenu(accessMenu)) {
-            case 1:
-                do {
-                    do {
-                        System.out.println("inserisci il tuo username o id : ");
-                        i_id = scanner.nextLine().toLowerCase();
+        do {
+            do {
+                System.out.println("inserisci il tuo username o id : ");
+                i_id = scanner.nextLine().toLowerCase();
 
-                        if (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
-                                i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a') {
-                            System.out.println("L'id che hai inserito non e' valido. Riprova.");
-                        }
+                if (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
+                        i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a') {
+                    System.out.println("L'id che hai inserito non e' valido. Riprova.");
+                }
 
-                    } while (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
-                            i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a');
+            } while (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
+                    i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a');
 
-                    System.out.println("inserisci la tua password : ");
-                    i_password = scanner.nextLine();
+            System.out.println("inserisci la tua password : ");
+            i_password = scanner.nextLine();
 
-                    // If the user inserts an incorrect id or password, tell him.
-                    if (!(invalidLogin = access(i_id, i_password))) {
-                        System.out.println("You insert an incorrect id or password");
-                    }
-                } while (!invalidLogin);
+            // If the user inserts an incorrect id or password, tell him.
+            if (!(invalidLogin = access(i_id, i_password))) {
+                System.out.println("You insert an incorrect id or password");
+            }
+        } while (!invalidLogin);
 
-                System.out.println("Accesso eseguito!");
+        System.out.println("Accesso eseguito!");
 
-                break;
-            case 2:
-                //register();
-                break;
+        // evaluate what type of user is the one who logged in
+        switch (i_id.charAt(0)) {
+            case 's' -> userType = UserType.student;
+            case 'p' -> userType = UserType.parent;
+            case 't' -> userType = UserType.teacher;
+            case 'a' -> userType = UserType.admin;
         }
 
-
+        switch (userType) {
+            case UserType.student:
+                // Do stuff of the student
+                break;
+            case UserType.parent:
+                // Do stuff of the parent
+                break;
+            case UserType.teacher:
+                // Do stuff of the teacher
+                break;
+            case UserType.admin:
+                // Do stuff of the admin
+                break;
+        }
     }
 
     /**
@@ -81,15 +96,19 @@ public class Main {
             case 's':
                 filePath = "JSON/JsonFile/User/Students.json";
                 readJsonFile(filePath);
+                break;
             case 't':
                 filePath = "JSON/JsonFile/User/Teachers.json";
                 readJsonFile(filePath);
+                break;
             case 'p':
                 filePath = "JSON/JsonFile/User/Parents.json";
                 readJsonFile(filePath);
+                break;
             case 'a':
                 filePath = "JSON/JsonFile/User/Administrators.json";
                 readJsonFile(filePath);
+                break;
         }
 
         // Search in the file of the user type

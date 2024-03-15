@@ -1,9 +1,9 @@
 [
   {
-    "id": "idValue",
-    "password": "pw",
-    "name": "name",
-    "surname": "surname",
+    "id": "a1",
+    "password": "pw1",
+    "name": "admin1",
+    "surname": "sn_admin1",
     "address": {
       "street": "streetName",
       "city": "cityName",
