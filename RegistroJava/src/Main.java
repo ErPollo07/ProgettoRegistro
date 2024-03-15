@@ -14,6 +14,7 @@ public class Main {
     static JSONArray usersJsonArray = new JSONArray(); // the file os users. Es: Students, Teachers, ...
     static JSONObject agendaJson = new JSONObject(); // the file of the agenda
     static JSONObject classroomsJson = new JSONObject(); // the file of the classroom with all the students
+    static JSONObject stuffJson = new JSONObject(); // the file which contains the stuff
 
     static enum UserType {student, parent, teacher, admin};
     static UserType userType;
@@ -47,13 +48,29 @@ public class Main {
                 "[3] - Crea nuovo utente"
         };
 
+        String[] typeOfCreateableUser = {
+                "Che tipo di studente vuoi creare?",
+                "[1] - Studente",
+                "[2] - Genitore",
+                "[3] - Insegnante",
+                "[4] - Amministratore"
+        };
+
+        // Variable for login
         String i_id, i_password;
         boolean invalidLogin = false;
+
+        // Variable for creating new user
+        String typeOfUser = "";
+        String i_name = "";
+        String i_surname = "";
+        String[] address = new String[3];
+        String new_id = "";
 
         do {
             do {
                 System.out.println("inserisci il tuo username o id : ");
-                i_id = scanner.nextLine().toLowerCase();
+                i_id = scanner.next().toLowerCase();
 
                 if (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
                         i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a') {
@@ -64,7 +81,7 @@ public class Main {
                     i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a');
 
             System.out.println("inserisci la tua password : ");
-            i_password = scanner.nextLine();
+            i_password = scanner.next();
 
             // If the user inserts an incorrect id or password, tell him.
             if (!(invalidLogin = access(i_id, i_password))) {
@@ -96,13 +113,71 @@ public class Main {
 
                 switch (printMenu(adminPrincipalMenu)) {
                     case 1:
-                        // Visualizza gli studenti di una classe
+                        // View the student of a classroom
                         break;
                     case 2:
-                        // Visualizza elenco insegnanti
+                        // View the list of teachers
                         break;
                     case 3:
-                        // Crea nuovo utente
+                        // Create new user
+
+                        // Ask what type of user he wants to create
+                        typeOfUser = switch (printMenu(typeOfCreateableUser)) {
+                            case 1 -> "s";
+                            case 2 -> "t";
+                            case 3 -> "p";
+                            case 4 -> "a";
+                            default -> "None";
+                        };
+
+                        // Ask the name
+                        System.out.println("Inserisci il nome del nuovo utente: ");
+                        i_name = scanner.next();
+
+                        // Ask the surname
+                        System.out.println("Inserisci il cognome del nuovo utente: ");
+                        i_surname = scanner.next();
+
+                        // Ask address
+                        // - streetName
+                        System.out.println("inserisci la via in cui abita in nuovo utente: ");
+                        address[0] = scanner.next();
+                        // - cityName
+                        System.out.println("inserisci la citta' in cui abita: ");
+                        address[1] = scanner.next();
+                        // - cap
+                        System.out.println("inserisci il cap della citta' in cui abita: ");
+                        address[2] = scanner.next();
+
+                        // if is a student ask all the info of the parent to create the account for it
+                        if (typeOfUser.equals("s")) {
+                            // create the parent account
+                        }
+
+                        // Create a id
+                        // read the stuff json file
+                        readStuffJsonFile("JSON/JsonFile/stuff.json");
+
+                        // Get the counter of the id
+                        int counterId = (int)stuffJson.get("countIdNumber");
+
+                        // create the id based on the type of user
+                        new_id = switch (typeOfUser) {
+                            case "s" -> "s" + counterId;
+                            case "p" -> "p" + counterId;
+                            case "t" -> "t" + counterId;
+                            case "a" -> "a" + counterId;
+                            default -> "";
+                        };
+
+                        // upgrade the counter
+                        stuffJson.replace("countIdNumber", counterId+1);
+
+                        // Create a password
+
+                        // Call the method to create an account
+
+
                         break;
                     default:
                         System.out.println("NOT VALID OPTION");
@@ -173,6 +248,8 @@ public class Main {
         return false;
     }
 
+    /* TODO do an overload of this method with all the JSON file possibility
+    * */
     private static void readJsonFile(String fileName) {
         // Create the json parser
         JSONParser jsonParser = new JSONParser();
@@ -183,6 +260,21 @@ public class Main {
             // assign to the JSONObject (global variable)
             // the file which we want ot extract information from
             usersJsonArray = (JSONArray) obj;
+        } catch (IOException | ParseException e) {
+            System.out.println("C'e' stato un problema con i file di accesso. Ci scusiamo per il disagio");
+        }
+    }
+
+    private static void readStuffJsonFile(String fileName) {
+        // Create the json parser
+        JSONParser jsonParser = new JSONParser();
+
+        // Read and save the Agenda.json content in jsonObj
+        try (FileReader fileReader = new FileReader(fileName)) {
+            Object obj = jsonParser.parse(fileReader);
+            // assign to the JSONObject (global variable)
+            // the file which we want ot extract information from
+            stuffJson = (JSONObject) obj;
         } catch (IOException | ParseException e) {
             System.out.println("C'e' stato un problema con i file di accesso. Ci scusiamo per il disagio");
         }
@@ -243,5 +335,7 @@ public class Main {
 
 
 /* CHANGE LOG
-14/3/2024 Nicola Done access method, which use verifyAccess to verify if the user exists.
+DATE       BRANCH                 AUTHOR     COMMENT
+14/3/2024  main                   Nicola     Done access method, which use verifyAccess to verify if the user exists.
+15/03/2024 DeleteRegisterMethod   Nicola     Add all the input for register a new user
 */
