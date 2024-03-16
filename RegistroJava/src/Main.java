@@ -5,7 +5,6 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -26,7 +25,8 @@ public class Main {
         String[] accessMenu = {
                 "Cosa vuoi fare?",
                 "[1] - Accedi",
-                "[2] - Registrati"
+                "[2] - Registrati",
+                "[3] - Esci"
         };
 
         String[] studentPrincipalMenu = {
@@ -62,10 +62,11 @@ public class Main {
 
         // Variable for creating new user
         String typeOfUser = "";
-        String i_name = "";
-        String i_surname = "";
+        String new_name = "";
+        String new_surname = "";
         String[] address = new String[3];
         String new_id = "";
+        String new_password = "";
 
         do {
             do {
@@ -120,6 +121,7 @@ public class Main {
                         break;
                     case 3:
                         // Create new user
+                        String parentId = "";
 
                         // Ask what type of user he wants to create
                         typeOfUser = switch (printMenu(typeOfCreateableUser)) {
@@ -132,11 +134,11 @@ public class Main {
 
                         // Ask the name
                         System.out.println("Inserisci il nome del nuovo utente: ");
-                        i_name = scanner.next();
+                        new_name = scanner.next();
 
                         // Ask the surname
                         System.out.println("Inserisci il cognome del nuovo utente: ");
-                        i_surname = scanner.next();
+                        new_surname = scanner.next();
 
                         // Ask address
                         // - streetName
@@ -156,7 +158,7 @@ public class Main {
 
                         // Create a id
                         // read the stuff json file
-                        readStuffJsonFile("JSON/JsonFile/stuff.json");
+                        readJsonFile(stuffJson, "JSON/JsonFile/stuff.json");
 
                         // Get the counter of the id
                         int counterId = (int)stuffJson.get("countIdNumber");
@@ -174,9 +176,10 @@ public class Main {
                         stuffJson.replace("countIdNumber", counterId+1);
 
                         // Create a password
+                        new_password = crateNewPassword(new_name, new_surname, new_id);
 
                         // Call the method to create an account
-
+                        Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
 
                         break;
                     default:
@@ -185,6 +188,48 @@ public class Main {
 
                 break;
         }
+    }
+
+    /**
+     * Returns the new password for a new user.
+     * <br>
+     * Examples:
+     * <pre>
+     *     name: "Mario", surname: "Sturniolo", id: "S827362"
+     *     => password: "MARSTU827362"
+     *
+     *     name: "Sofia", surname: "Baggio", id: "P74638294"
+     *     => password: "SOFBAG74638294"
+     * </pre>
+     *
+     *  But If you have a name or surname minor than 3 letters.
+     *  <br>
+     *  Examples:
+     *  <pre>
+     *      name: "Ya", surname: "Carim", id: "S745839
+     *      => password: "YACAR745839"
+     *
+     *      name: "Giorgio", surname: "Ba", id: "S4839334"
+     *      => password: "GIOBA4839334"
+     *  </pre>
+     *
+     * @param name the name of a user
+     * @param surname the surname of a user
+     * @param id the id of a user
+     * @return the password of the specified user
+     */
+    private static String crateNewPassword(String name, String surname, String id) {
+        int minLength = 3;
+
+        // If the name or surname has a length minor than 3,
+        // then call the min method to get the minimum length.
+        if (name.length() < 3 || surname.length() < 3) {
+            //
+            minLength = Math.min(name.length(), surname.length());
+        }
+
+        // Return the password with <first 3 characters of name><first 3 characters of surname><the id of the user>
+        return name.substring(0, minLength - 1).toUpperCase() + surname.substring(0, minLength - 1).toUpperCase() + id.substring(1);
     }
 
     /**
@@ -199,19 +244,19 @@ public class Main {
         switch (i_id.charAt(0)) {
             case 's':
                 filePath = "JSON/JsonFile/User/Students.json";
-                readJsonFile(filePath);
+                readJsonFile(usersJsonArray, filePath);
                 break;
             case 't':
                 filePath = "JSON/JsonFile/User/Teachers.json";
-                readJsonFile(filePath);
+                readJsonFile(usersJsonArray, filePath);
                 break;
             case 'p':
                 filePath = "JSON/JsonFile/User/Parents.json";
-                readJsonFile(filePath);
+                readJsonFile(usersJsonArray, filePath);
                 break;
             case 'a':
                 filePath = "JSON/JsonFile/User/Administrators.json";
-                readJsonFile(filePath);
+                readJsonFile(usersJsonArray, filePath);
                 break;
         }
 
@@ -248,9 +293,7 @@ public class Main {
         return false;
     }
 
-    /* TODO do an overload of this method with all the JSON file possibility
-    * */
-    private static void readJsonFile(String fileName) {
+    private static void readJsonFile(JSONObject jObj, String fileName) {
         // Create the json parser
         JSONParser jsonParser = new JSONParser();
 
@@ -259,13 +302,13 @@ public class Main {
             Object obj = jsonParser.parse(fileReader);
             // assign to the JSONObject (global variable)
             // the file which we want ot extract information from
-            usersJsonArray = (JSONArray) obj;
+            jObj = (JSONObject) obj;
         } catch (IOException | ParseException e) {
             System.out.println("C'e' stato un problema con i file di accesso. Ci scusiamo per il disagio");
         }
     }
 
-    private static void readStuffJsonFile(String fileName) {
+    private static void readJsonFile(JSONArray jArray, String fileName) {
         // Create the json parser
         JSONParser jsonParser = new JSONParser();
 
@@ -274,7 +317,7 @@ public class Main {
             Object obj = jsonParser.parse(fileReader);
             // assign to the JSONObject (global variable)
             // the file which we want ot extract information from
-            stuffJson = (JSONObject) obj;
+            jArray = (JSONArray) obj;
         } catch (IOException | ParseException e) {
             System.out.println("C'e' stato un problema con i file di accesso. Ci scusiamo per il disagio");
         }
@@ -338,4 +381,5 @@ public class Main {
 DATE       BRANCH                 AUTHOR     COMMENT
 14/3/2024  main                   Nicola     Done access method, which use verifyAccess to verify if the user exists.
 15/03/2024 DeleteRegisterMethod   Nicola     Add all the input for register a new user
+16/03/2024 DeleteRegisterMethod   Nicola     Create the method to create a new password for all the users
 */

@@ -21,21 +21,20 @@ public class Admin extends User {
     /**
      * The method creates a new Student
      */
-    public void setNewUser(String id, String password, String name, String surname, String address, String parentId,
-                           String classroom, String[][] grades, String[] notes) {
+    static public void setNewStudent(String id, String password, String name, String surname, String[] address, String parentId) {
     }
 
     /**
      * The method creates a new Parent
      */
-    public void setNewUser(String id, String password, String name, String surname, String address, String childId,
+    public void setNewParent(String id, String password, String name, String surname, String[] address, String childId,
                            String[][] interviews) {
     }
 
     /**
      * The method creates a new Teacher
      */
-    public void setNewUser(String id, String password, String name, String surname, String address, String subject,
+    public void setNewTeacher(String id, String password, String name, String surname, String[] address, String subject,
                            String[] classrooms) {
         // Implementazione per un utente con un parametro subject
     }
@@ -43,7 +42,7 @@ public class Admin extends User {
     /**
      * The method creates a new Admin
      */
-    public void setNewUser(String id, String password, String name, String surname, String address, String userType) {
+    public void setNewAdmin(String id, String password, String name, String surname, String[] address, String userType) {
     }
 }
 
