@@ -1,3 +1,6 @@
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class Admin extends User {
 
     /**
@@ -21,7 +24,27 @@ public class Admin extends User {
     /**
      * The method creates a new Student
      */
-    static public void setNewStudent(String id, String password, String name, String surname, String[] address, String parentId) {
+    static public JSONObject setNewStudent(String id, String password, String name, String surname, String[] address, String parentId) {
+        JSONObject jsonObj = new JSONObject();
+        JSONArray jsonAddressArray = new JSONArray();
+        JSONArray jsonGradesArray = new JSONArray();
+        JSONArray jsonNotesArray = new JSONArray();
+
+
+        jsonObj.put("id", id);
+        jsonObj.put("name", name);
+        jsonObj.put("surname", surname);
+        jsonAddressArray.addLast(address[0]);
+        jsonAddressArray.addLast(address[1]);
+        jsonAddressArray.addLast(address[2]);
+        jsonObj.put("address", jsonAddressArray);
+        jsonObj.put("parentId", parentId);
+        jsonObj.put("classroom", "");
+        jsonObj.put("grades", jsonGradesArray);
+        jsonObj.put("notes", jsonNotesArray);
+
+
+        return jsonObj;
     }
 
     /**
@@ -45,4 +68,5 @@ public class Admin extends User {
     public void setNewAdmin(String id, String password, String name, String surname, String[] address, String userType) {
     }
 }
+
 

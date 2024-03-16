@@ -1,46 +1,103 @@
 [
   {
-    "id": "s1",
-    "password": "pw",
-    "name": "name",
-    "surname": "surname",
-    "address": {
-      "street": "streetName",
-      "city": "cityName",
-      "cap": "cap"
-    },
     "parent": "parentId",
-    "classroom": "3E",
-    "grades": {
-      "math": [1, 2, 3, 4],
-      "italian": [1, 2, 3, 4, 5, 6],
-      "informatics": [1, 2, 3]
+    "password": "pw",
+    "address": {
+      "cap": "cap",
+      "city": "cityName",
+      "street": "streetName"
     },
     "notes": [
       "arg1",
       "arg2"
-    ]
+    ],
+    "surname": "surname",
+    "name": "name",
+    "classroom": "3E",
+    "id": "s1",
+    "grades": {
+      "italian": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "math": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "informatics": [
+        1,
+        2,
+        3
+      ]
+    }
   },
   {
-    "id": "s2",
-    "password": "pw2",
-    "name": "name",
-    "surname": "surname",
-    "address": {
-      "street": "streetName",
-      "city": "cityName",
-      "cap": "cap"
-    },
     "parent": "parentId",
-    "classroom": "3E",
-    "grades": {
-      "math": [1, 2, 3, 4],
-      "italian": [1, 2, 3, 4, 5, 6],
-      "informatics": [1, 2, 3]
+    "password": "pw2",
+    "address": {
+      "cap": "cap",
+      "city": "cityName",
+      "street": "streetName"
     },
     "notes": [
       "arg1",
       "arg2"
-    ]
+    ],
+    "surname": "surname",
+    "name": "name",
+    "classroom": "3E",
+    "id": "s2",
+    "grades": {
+      "italian": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "math": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "informatics": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "address": [
+      "v",
+      "c",
+      "4535"
+    ],
+    "surname": "c",
+    "name": "n",
+    "id": "s0",
+    "parentId": ""
+  },
+  {
+    "address": [
+      "v",
+      "c",
+      "345324"
+    ],
+    "notes": [],
+    "surname": "c",
+    "name": "n",
+    "classroom": "",
+    "id": "s0",
+    "grades": [],
+    "parentId": ""
   }
 ]

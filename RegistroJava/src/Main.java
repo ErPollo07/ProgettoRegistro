@@ -1,9 +1,11 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
@@ -25,8 +27,7 @@ public class Main {
         String[] accessMenu = {
                 "Cosa vuoi fare?",
                 "[1] - Accedi",
-                "[2] - Registrati",
-                "[3] - Esci"
+                "[2] - Registrati"
         };
 
         String[] studentPrincipalMenu = {
@@ -45,7 +46,8 @@ public class Main {
                 "MENU PRINCIPALE",
                 "[1] - Visualizza gli studenti di una classe",
                 "[2] - Visualizza elenco insegnanti",
-                "[3] - Crea nuovo utente"
+                "[3] - Crea nuovo utente",
+                "[4] - Esci"
         };
 
         String[] typeOfCreateableUser = {
@@ -61,6 +63,8 @@ public class Main {
         boolean invalidLogin = false;
 
         // Variable for creating new user
+        JSONArray jsonToModify = new JSONArray();
+        JSONObject user; // the obj of the user which we want to create
         String typeOfUser = "";
         String new_name = "";
         String new_surname = "";
@@ -84,8 +88,10 @@ public class Main {
             System.out.println("inserisci la tua password : ");
             i_password = scanner.next();
 
+            invalidLogin = access(i_id, i_password);
+
             // If the user inserts an incorrect id or password, tell him.
-            if (!(invalidLogin = access(i_id, i_password))) {
+            if (!invalidLogin) {
                 System.out.println("You insert an incorrect id or password");
             }
         } while (!invalidLogin);
@@ -149,7 +155,7 @@ public class Main {
                         address[1] = scanner.next();
                         // - cap
                         System.out.println("inserisci il cap della citta' in cui abita: ");
-                        address[2] = scanner.next();
+                        address[2] = (String) scanner.next();
 
                         // if is a student ask all the info of the parent to create the account for it
                         if (typeOfUser.equals("s")) {
@@ -158,10 +164,10 @@ public class Main {
 
                         // Create a id
                         // read the stuff json file
-                        readJsonFile(stuffJson, "JSON/JsonFile/stuff.json");
+                        stuffJson = readJsonObjectFile("JSON/JsonFile/stuff.json");
 
                         // Get the counter of the id
-                        int counterId = (int)stuffJson.get("countIdNumber");
+                        long counterId = (long) stuffJson.get("countIdNumber");
 
                         // create the id based on the type of user
                         new_id = switch (typeOfUser) {
@@ -178,8 +184,13 @@ public class Main {
                         // Create a password
                         new_password = crateNewPassword(new_name, new_surname, new_id);
 
+                        // read the json file like Students.json, Teachers.json, ...
+                        jsonToModify = readJsonArrayFile("JSON/JsonFile/User/Students.json");
+
                         // Call the method to create an account
-                        Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
+                        user = Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
+
+                        jsonToModify.addLast(user);
 
                         break;
                     default:
@@ -187,6 +198,19 @@ public class Main {
                 }
 
                 break;
+        }
+
+        jsonArrayToFile("JSON/JsonFile/User/Students.json", jsonToModify);
+    }
+
+
+    private static void jsonArrayToFile(String fileName, JSONArray jsonArr) {
+        // Write the jsonArray into the file
+        try (FileWriter fileWriter = new FileWriter(fileName)) {
+            fileWriter.write(JSONValue.toJSONString(jsonArr));
+            System.out.println("Oggetto JSON aggiornato e scritto su '" + fileName + "'");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -244,19 +268,19 @@ public class Main {
         switch (i_id.charAt(0)) {
             case 's':
                 filePath = "JSON/JsonFile/User/Students.json";
-                readJsonFile(usersJsonArray, filePath);
+                usersJsonArray = readJsonArrayFile(filePath);
                 break;
             case 't':
                 filePath = "JSON/JsonFile/User/Teachers.json";
-                readJsonFile(usersJsonArray, filePath);
+                usersJsonArray = readJsonArrayFile(filePath);
                 break;
             case 'p':
                 filePath = "JSON/JsonFile/User/Parents.json";
-                readJsonFile(usersJsonArray, filePath);
+                usersJsonArray = readJsonArrayFile(filePath);
                 break;
             case 'a':
                 filePath = "JSON/JsonFile/User/Administrators.json";
-                readJsonFile(usersJsonArray, filePath);
+                usersJsonArray = readJsonArrayFile(filePath);
                 break;
         }
 
@@ -293,34 +317,40 @@ public class Main {
         return false;
     }
 
-    private static void readJsonFile(JSONObject jObj, String fileName) {
+    private static JSONObject readJsonObjectFile(String fileName) {
         // Create the json parser
         JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObject = new JSONObject();
 
         // Read and save the Agenda.json content in jsonObj
         try (FileReader fileReader = new FileReader(fileName)) {
             Object obj = jsonParser.parse(fileReader);
             // assign to the JSONObject (global variable)
             // the file which we want ot extract information from
-            jObj = (JSONObject) obj;
+            jsonObject = (JSONObject) obj;
         } catch (IOException | ParseException e) {
             System.out.println("C'e' stato un problema con i file di accesso. Ci scusiamo per il disagio");
         }
+
+        return jsonObject;
     }
 
-    private static void readJsonFile(JSONArray jArray, String fileName) {
+    private static JSONArray readJsonArrayFile(String fileName) {
         // Create the json parser
         JSONParser jsonParser = new JSONParser();
+        JSONArray jsonArray = new JSONArray();
 
         // Read and save the Agenda.json content in jsonObj
         try (FileReader fileReader = new FileReader(fileName)) {
             Object obj = jsonParser.parse(fileReader);
             // assign to the JSONObject (global variable)
             // the file which we want ot extract information from
-            jArray = (JSONArray) obj;
+            jsonArray = (JSONArray) obj;
         } catch (IOException | ParseException e) {
             System.out.println("C'e' stato un problema con i file di accesso. Ci scusiamo per il disagio");
         }
+
+        return jsonArray;
     }
 
     /**
@@ -381,5 +411,6 @@ public class Main {
 DATE       BRANCH                 AUTHOR     COMMENT
 14/3/2024  main                   Nicola     Done access method, which use verifyAccess to verify if the user exists.
 15/03/2024 DeleteRegisterMethod   Nicola     Add all the input for register a new user
-16/03/2024 DeleteRegisterMethod   Nicola     Create the method to create a new password for all the users
+16/03/2024 DeleteRegisterMethod   Nicola     Done the part of the registration of a new user.
+
 */
