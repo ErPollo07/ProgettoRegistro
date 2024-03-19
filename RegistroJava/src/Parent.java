@@ -1,4 +1,4 @@
-public class Parent extends User{
+public class Parent extends User {
 
 
 // per formattare il codice bene premere ctrl+alt+l

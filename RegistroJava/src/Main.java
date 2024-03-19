@@ -3,12 +3,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -17,8 +15,14 @@ public class Main {
     static JSONObject classroomsJson = new JSONObject(); // the file of the classroom with all the students
     static JSONObject stuffJson = new JSONObject(); // the file which contains the stuff
 
-    static enum UserType {student, parent, teacher, admin};
+    enum UserType {student, parent, teacher, admin};
     static UserType userType;
+
+    static Student student;
+    static Teacher teacher;
+    static Parent parent;
+    static Admin admin;
+
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -99,13 +103,27 @@ public class Main {
 
         System.out.println("Accesso eseguito!");
 
-        // evaluate what type of user is the one who logged in
+        // evaluate what type of user is the one who logged in, and instantiate the correct object
         switch (i_id.charAt(0)) {
-            case 's' -> userType = UserType.student;
-            case 'p' -> userType = UserType.parent;
-            case 't' -> userType = UserType.teacher;
-            case 'a' -> userType = UserType.admin;
+            case 's':
+                userType = UserType.student;
+                student = new Student();
+                break;
+            case 'p':
+                userType = UserType.parent;
+                teacher = new Teacher();
+                break;
+            case 't':
+                userType = UserType.teacher;
+                parent = new Parent();
+                break;
+            case 'a':
+                userType = UserType.admin;
+                admin = new Admin();
+                break;
         }
+
+        loadUserInfo(i_id);
 
         switch (userType) {
             case UserType.student:
@@ -221,6 +239,83 @@ public class Main {
 
         jsonArrayToFile("JSON/JsonFile/User/Students.json", jsonToModify);
     }
+
+    private static void loadUserInfo(String userId) {
+        JSONArray usersJson = new JSONArray();
+
+        // Read the correct file where extract all the user of the same type of the user which we want to search
+        usersJson = switch (userType) {
+            case UserType.student -> readJsonArrayFile("JSON/JsonFile/User/Students.json");
+            case UserType.parent -> readJsonArrayFile("JSON/JsonFile/User/Parents.json");
+            case UserType.teacher -> readJsonArrayFile("JSON/JsonFile/User/Teachers.json");
+            case UserType.admin -> readJsonArrayFile("JSON/JsonFile/User/Administrators.json");
+        };
+
+        // Search for the correct user
+        for (Object user : usersJson) {
+            JSONObject jsonUser = (JSONObject) user;
+
+            if (jsonUser.get("id").equals(userId)) {
+                // Switch the type of
+                switch (userType) {
+                    case UserType.student:
+                        // get the jsonArray from the object of the user
+                        JSONObject addressObj = (JSONObject) jsonUser.get("address");
+                        // cast all the information to string
+                        // and pass it all into the array of string that contains the address information
+                        String[] address = {(String) addressObj.get("street"), (String) addressObj.get("city"), (String) addressObj.get("cap")};
+
+                        // Get the jsonArray of notes from the user object
+                        JSONArray notesArray = (JSONArray) jsonUser.get("notes");
+                        // Create the note array with length equals to notesArray
+                        String[] notes = new String[notesArray.size()];
+                        // pass all the item of notesArray (JSONArray) into notes (String[])
+                        for (int i = 0; i < notesArray.size(); i++) {
+                            notes[i] = (String) notesArray.get(i);
+                        }
+
+                        // Create the object
+                        JSONObject gradesObj = (JSONObject) jsonUser.get("grades");
+                        // Create the HashMap which stores the grades
+                        // Like this:
+                        // "NameOfTheSubject1": ListIntOfGrade1,
+                        // "NameOfTheSubject2": ListIntOfGrade2
+                        // ...
+                        Map<String, List<Integer>> gradesMap = new HashMap<>();
+                        // Cycle through all the subject which has grades
+                        for (Object key : gradesObj.keySet()) {
+                            // get the array of the grades
+                            JSONArray gradesArray = (JSONArray) gradesObj.get(key);
+                            // Create the list of grades (es: [1,2,3,4,5])
+                            List<Integer> gradesList = new ArrayList<>();
+                            // Cycle through all the grades of a subject
+                            for (Object o : gradesArray) {
+                                // Add a grade into the array of grades of a subject
+                                gradesList.add(((Long) o).intValue());
+                            }
+                            // Insert the array of grades of a subject into the hashMap
+                            gradesMap.put((String) key, gradesList);
+                        }
+
+                        // load all the info of the user
+                        student.loadInfo(userId, (String)jsonUser.get("password"), (String)jsonUser.get("name"),
+                                (String)jsonUser.get("surname"), address, (String)jsonUser.get("classroom"), gradesMap, notes);
+
+                        break;
+                    case UserType.parent:
+                        break;
+                    case UserType.teacher:
+                        break;
+                    case UserType.admin:
+                        break;
+
+                }
+
+                break;
+            }
+        }
+    }
+
 
 
     private static void jsonArrayToFile(String fileName, JSONArray jsonArr) {
@@ -354,6 +449,11 @@ public class Main {
         return jsonObject;
     }
 
+    /**
+     *
+     * @param fileName
+     * @return
+     */
     private static JSONArray readJsonArrayFile(String fileName) {
         // Create the json parser
         JSONParser jsonParser = new JSONParser();
@@ -431,5 +531,7 @@ DATE       BRANCH                 AUTHOR     COMMENT
 14/3/2024  main                   Nicola     Done access method, which use verifyAccess to verify if the user exists.
 15/03/2024 DeleteRegisterMethod   Nicola     Add all the input for register a new user
 16/03/2024 DeleteRegisterMethod   Nicola     Done the part of the registration of a new user.
-19/03/2024 DeleteRegisterMethod   Nicola     Add a do-while to repeat the main cycle of all the user
+19/03/2024 DeleteRegisterMethod   Nicola     Add a do-while to repeat the main cycle of all the user,
+                                             Done loadInfo method
+                                             which loads the info of the user from the json file to the User class variable
 */

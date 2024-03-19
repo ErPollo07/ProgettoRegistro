@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.Map;
+
 public class Student extends User {
 
     /**
@@ -46,5 +49,17 @@ public class Student extends User {
      */
     public String[] getNote(String studentId) {
         return new String[1];
+    }
+
+    public void loadInfo(String id, String password, String name, String surname, String[] address, String classroom,
+                         Map<String, List<Integer>> grades, String[] notes) {
+        setUserId(id);
+        setPassword(password);
+        setName(name);
+        setName(surname);
+        setAddress(address);
+        setClassroom(classroom);
+        setGrades(grades);
+        setNotes(notes);
     }
 }
