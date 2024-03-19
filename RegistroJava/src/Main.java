@@ -62,6 +62,8 @@ public class Main {
         String i_id, i_password;
         boolean invalidLogin = false;
 
+        boolean continueToUse = true;
+
         // Variable for creating new user
         JSONArray jsonToModify = new JSONArray();
         JSONObject user; // the obj of the user which we want to create
@@ -81,7 +83,6 @@ public class Main {
                         i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a') {
                     System.out.println("L'id che hai inserito non e' valido. Riprova.");
                 }
-
             } while (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
                     i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a');
 
@@ -108,96 +109,114 @@ public class Main {
 
         switch (userType) {
             case UserType.student:
-                // Do stuff of the student
+
+                do {
+                    // Do stuff of the student
+                } while(continueToUse);
                 break;
             case UserType.parent:
-                // Do stuff of the parent
+
+                do {
+                    // Do stuff of the parent
+                } while(continueToUse);
                 break;
             case UserType.teacher:
-                // Do stuff of the teacher
+
+
+                do {
+                    // Do stuff of the teacher
+                } while(continueToUse);
                 break;
             case UserType.admin:
 
-                switch (printMenu(adminPrincipalMenu)) {
-                    case 1:
-                        // View the student of a classroom
-                        break;
-                    case 2:
-                        // View the list of teachers
-                        break;
-                    case 3:
-                        // Create new user
-                        String parentId = "";
+                do {
+                    switch (printMenu(adminPrincipalMenu)) {
+                        case 1:
+                            // View the student of a classroom
+                            break;
+                        case 2:
+                            // View the list of teachers
+                            break;
+                        case 3:
+                            // Create new user
+                            String parentId = "";
 
-                        // Ask what type of user he wants to create
-                        typeOfUser = switch (printMenu(typeOfCreateableUser)) {
-                            case 1 -> "s";
-                            case 2 -> "t";
-                            case 3 -> "p";
-                            case 4 -> "a";
-                            default -> "None";
-                        };
+                            // Ask what type of user he wants to create
+                            typeOfUser = switch (printMenu(typeOfCreateableUser)) {
+                                case 1 -> "s";
+                                case 2 -> "t";
+                                case 3 -> "p";
+                                case 4 -> "a";
+                                default -> "None";
+                            };
 
-                        // Ask the name
-                        System.out.println("Inserisci il nome del nuovo utente: ");
-                        new_name = scanner.next();
+                            // Ask the name
+                            System.out.println("Inserisci il nome del nuovo utente: ");
+                            new_name = scanner.next();
 
-                        // Ask the surname
-                        System.out.println("Inserisci il cognome del nuovo utente: ");
-                        new_surname = scanner.next();
+                            // Ask the surname
+                            System.out.println("Inserisci il cognome del nuovo utente: ");
+                            new_surname = scanner.next();
 
-                        // Ask address
-                        // - streetName
-                        System.out.println("inserisci la via in cui abita in nuovo utente: ");
-                        address[0] = scanner.next();
-                        // - cityName
-                        System.out.println("inserisci la citta' in cui abita: ");
-                        address[1] = scanner.next();
-                        // - cap
-                        System.out.println("inserisci il cap della citta' in cui abita: ");
-                        address[2] = (String) scanner.next();
+                            // Ask address
+                            // - streetName
+                            System.out.println("inserisci la via in cui abita in nuovo utente: ");
+                            address[0] = scanner.next();
+                            // - cityName
+                            System.out.println("inserisci la citta' in cui abita: ");
+                            address[1] = scanner.next();
+                            // - cap
+                            System.out.println("inserisci il cap della citta' in cui abita: ");
+                            address[2] = (String) scanner.next();
 
-                        // if is a student ask all the info of the parent to create the account for it
-                        if (typeOfUser.equals("s")) {
-                            // create the parent account
-                        }
+                            // if is a student ask all the info of the parent to create the account for it
+                            if (typeOfUser.equals("s")) {
+                                // create the parent account
+                            }
 
-                        // Create a id
-                        // read the stuff json file
-                        stuffJson = readJsonObjectFile("JSON/JsonFile/stuff.json");
+                            // Create a id
+                            // read the stuff json file
+                            stuffJson = readJsonObjectFile("JSON/JsonFile/stuff.json");
 
-                        // Get the counter of the id
-                        long counterId = (long) stuffJson.get("countIdNumber");
+                            // Get the counter of the id
+                            long counterId = (long) stuffJson.get("countIdNumber");
 
-                        // create the id based on the type of user
-                        new_id = switch (typeOfUser) {
-                            case "s" -> "s" + counterId;
-                            case "p" -> "p" + counterId;
-                            case "t" -> "t" + counterId;
-                            case "a" -> "a" + counterId;
-                            default -> "";
-                        };
+                            // create the id based on the type of user
+                            new_id = switch (typeOfUser) {
+                                case "s" -> "s" + counterId;
+                                case "p" -> "p" + counterId;
+                                case "t" -> "t" + counterId;
+                                case "a" -> "a" + counterId;
+                                default -> "";
+                            };
 
-                        // upgrade the counter
-                        stuffJson.replace("countIdNumber", counterId+1);
+                            // upgrade the counter
+                            stuffJson.replace("countIdNumber", counterId+1);
 
-                        // Create a password
-                        new_password = crateNewPassword(new_name, new_surname, new_id);
+                            // Create a password
+                            new_password = crateNewPassword(new_name, new_surname, new_id);
 
-                        // read the json file like Students.json, Teachers.json, ...
-                        jsonToModify = readJsonArrayFile("JSON/JsonFile/User/Students.json");
+                            // read the json file like Students.json, Teachers.json, ...
+                            jsonToModify = readJsonArrayFile("JSON/JsonFile/User/Students.json");
 
-                        // Call the method to create an account
-                        user = Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
+                            // Call the method to create an account
+                            user = Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
 
-                        jsonToModify.addLast(user);
+                            jsonToModify.addLast(user);
 
-                        break;
-                    default:
-                        System.out.println("NOT VALID OPTION");
-                }
+                            break;
+                        case 4:
+                            continueToUse = false;
+                            break;
+                        default:
+                            System.out.println("NOT VALID OPTION");
+                    }
+                } while(continueToUse);
+
 
                 break;
+            default:
+                System.out.println("NON VALID USER TYPE");
         }
 
         jsonArrayToFile("JSON/JsonFile/User/Students.json", jsonToModify);
@@ -412,5 +431,5 @@ DATE       BRANCH                 AUTHOR     COMMENT
 14/3/2024  main                   Nicola     Done access method, which use verifyAccess to verify if the user exists.
 15/03/2024 DeleteRegisterMethod   Nicola     Add all the input for register a new user
 16/03/2024 DeleteRegisterMethod   Nicola     Done the part of the registration of a new user.
-
+19/03/2024 DeleteRegisterMethod   Nicola     Add a do-while to repeat the main cycle of all the user
 */
