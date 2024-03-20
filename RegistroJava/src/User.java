@@ -43,14 +43,6 @@ public class User {
         this.parentId = parentId;
     }
 
-    private String childId;
-    public String getChildId() {
-        return childId;
-    }
-    public void setChildId(String childId) {
-        this.childId = childId;
-    }
-
     private String[] address;
     public String[] getAddress() {
         return address;
@@ -81,14 +73,6 @@ public class User {
     }
     public void setNotes(String[] notes) {
         this.notes = notes;
-    }
-
-    private String[][] interviews;
-    public String[][] getInterviews() {
-        return interviews;
-    }
-    public void setInterviews(String[][] interviews) {
-        this.interviews = interviews;
     }
 
     private String subject;

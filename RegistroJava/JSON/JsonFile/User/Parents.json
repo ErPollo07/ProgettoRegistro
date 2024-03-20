@@ -1,7 +1,7 @@
 [
   {
-    "id": "idValue",
-    "password": "pw",
+    "id": "p1",
+    "password": "pw1",
     "name": "name",
     "surname": "surname",
     "address": {
@@ -9,15 +9,15 @@
       "city": "cityName",
       "cap": "cap"
     },
-    "child": "childId",
+    "childId": "childId",
     "interviews": [
       {
-        "profName": "profName",
-        "subject": "subject"
+        "profName": "profName1",
+        "subject": "subject1"
       },
       {
-        "profName": "profName",
-        "subject": "subject"
+        "profName": "profName2",
+        "subject": "subject2"
       }
     ]
   }

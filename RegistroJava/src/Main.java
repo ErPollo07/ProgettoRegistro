@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Array;
 import java.util.*;
 
 public class Main {
@@ -111,11 +112,11 @@ public class Main {
                 break;
             case 'p':
                 userType = UserType.parent;
-                teacher = new Teacher();
+                parent = new Parent();
                 break;
             case 't':
                 userType = UserType.teacher;
-                parent = new Parent();
+                teacher = new Teacher();
                 break;
             case 'a':
                 userType = UserType.admin;
@@ -123,7 +124,9 @@ public class Main {
                 break;
         }
 
+        // load all user info
         loadUserInfo(i_id);
+
 
         switch (userType) {
             case UserType.student:
@@ -200,13 +203,7 @@ public class Main {
                             long counterId = (long) stuffJson.get("countIdNumber");
 
                             // create the id based on the type of user
-                            new_id = switch (typeOfUser) {
-                                case "s" -> "s" + counterId;
-                                case "p" -> "p" + counterId;
-                                case "t" -> "t" + counterId;
-                                case "a" -> "a" + counterId;
-                                default -> "";
-                            };
+                            new_id = typeOfUser + counterId;
 
                             // upgrade the counter
                             stuffJson.replace("countIdNumber", counterId+1);
@@ -259,62 +256,25 @@ public class Main {
                 // Switch the type of student logged in
                 switch (userType) {
                     case UserType.student:
-                        // get the jsonArray from the object of the user
-                        JSONObject addressObj = (JSONObject) jsonUser.get("address");
-                        // cast all the information to string
-                        // and pass it all into the array of string that contains the address information
-                        String[] address = {(String) addressObj.get("street"), (String) addressObj.get("city"), (String) addressObj.get("cap")};
-
-                        // Get the jsonArray of notes from the user object
-                        JSONArray notesArray = (JSONArray) jsonUser.get("notes");
-                        // Create the note array with length equals to notesArray
-                        String[] notes = new String[notesArray.size()];
-                        // pass all the item of notesArray (JSONArray) into notes (String[])
-                        for (int i = 0; i < notesArray.size(); i++) {
-                            notes[i] = (String) notesArray.get(i);
-                        }
-
-                        // Create the object
-                        JSONObject gradesObj = (JSONObject) jsonUser.get("grades");
-                        // Create the HashMap which stores the grades
-                        // Like this:
-                        // "NameOfTheSubject1": ListIntOfGrade1,
-                        // "NameOfTheSubject2": ListIntOfGrade2
-                        // ...
-                        Map<String, List<Integer>> gradesMap = new HashMap<>();
-                        // Cycle through all the subject which has grades
-                        for (Object key : gradesObj.keySet()) {
-                            // get the array of the grades
-                            JSONArray gradesArray = (JSONArray) gradesObj.get(key);
-                            // Create the list of grades (es: [1,2,3,4,5])
-                            List<Integer> gradesList = new ArrayList<>();
-                            // Cycle through all the grades of a subject
-                            for (Object o : gradesArray) {
-                                // Add a grade into the array of grades of a subject
-                                gradesList.add(((Long) o).intValue());
-                            }
-                            // Insert the array of grades of a subject into the hashMap
-                            gradesMap.put((String) key, gradesList);
-                        }
-
-                        // load all the info of the user
-                        student.loadInfo(userId, (String)jsonUser.get("password"), (String)jsonUser.get("name"),
-                                (String)jsonUser.get("surname"), address, (String)jsonUser.get("classroom"), gradesMap, notes);
-
+                        loadStudentInfo(jsonUser, userId);
                         break;
                     case UserType.parent:
+                        loadParentInfo(jsonUser, userId);
                         break;
                     case UserType.teacher:
+                        loadTeacherInfo(jsonUser, userId);
                         break;
                     case UserType.admin:
+                        loadAdminInfo(jsonUser, userId);
                         break;
-
                 }
 
                 break;
             }
         }
     }
+
+
 
     private static void loadStudentInfo(JSONObject jsonUser, String userId) {
         // get the jsonArray from the object of the user
@@ -358,6 +318,49 @@ public class Main {
         // load all the info of the user
         student.loadInfo(userId, (String)jsonUser.get("password"), (String)jsonUser.get("name"),
                 (String)jsonUser.get("surname"), address, (String)jsonUser.get("classroom"), gradesMap, notes);
+    }
+
+    private static void loadParentInfo(JSONObject jsonUser, String userId) {
+        String pw =(String) jsonUser.get("password");
+        String name =(String) jsonUser.get("name");
+        String surname =(String) jsonUser.get("surname");
+        String childId =(String) jsonUser.get("childId");
+
+        JSONObject jsonAddress = (JSONObject) jsonUser.get("address");
+        String[] address = {(String) jsonAddress.get("streetName"), (String) jsonAddress.get("city"),
+                (String) jsonAddress.get("cap")};
+
+        JSONArray jsonInterviews = (JSONArray) jsonUser.get("interviews");
+        List<Map<String, String>> interviews = new ArrayList<>();
+
+        // Cycle through all the interviews
+        for (Object interview : jsonInterviews) {
+            // parse the object interview in a JSONObject
+            JSONObject jsonInterview = (JSONObject) interview;
+
+            // get the prof name and the subject
+            String profName = (String) jsonInterview.get("profName");
+            String subject = (String) jsonInterview.get("subject");
+
+            // Create a map for store profName value and the subject value
+            Map<String, String> interviewMap = new HashMap<>();
+            interviewMap.put("profName", profName);
+            interviewMap.put("subject", subject);
+
+            // Put the interview
+            interviews.add(interviewMap);
+        }
+
+        parent.loadInfo(userId, pw,name,surname, address,childId, interviews);
+    }
+
+    private static void loadTeacherInfo(JSONObject jsonUser, String userId) {
+        String classroom = (String) jsonUser.get("classroom");
+
+    }
+
+    private static void loadAdminInfo(JSONObject jsonUser, String userId) {
+
     }
 
     private static void jsonArrayToFile(String fileName, JSONArray jsonArr) {

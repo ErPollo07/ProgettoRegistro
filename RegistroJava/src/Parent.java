@@ -1,14 +1,22 @@
+import java.util.List;
+import java.util.Map;
+
 public class Parent extends User {
 
+    private String childId;
+    public String getChildId() {
+        return childId;
+    }
+    public void setChildId(String childId) {
+        this.childId = childId;
+    }
 
-// per formattare il codice bene premere ctrl+alt+l
-
-
-    /**
-     *  allows you to book a meeting with the teachers.
-     */
-    public String[] setMeetings() {
-        return new String[1];
+    private List<Map<String, String>> interviews;
+    public List<Map<String, String>> getInterviews() {
+        return interviews;
+    }
+    public void setInterviews(List<Map<String, String>> interviews) {
+        this.interviews = interviews;
     }
 
     /**
@@ -25,4 +33,13 @@ public class Parent extends User {
         return new String[1];
     }
 
+    public void loadInfo(String id, String password, String name, String surname, String[] address, String childId,
+                         List<Map<String, String>> interviews) {
+        setUserId(id);
+        setPassword(password);
+        setName(name);
+        setName(surname);
+        setAddress(address);
+        setInterviews(interviews);
+    }
 }
