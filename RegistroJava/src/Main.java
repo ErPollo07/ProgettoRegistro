@@ -256,7 +256,7 @@ public class Main {
             JSONObject jsonUser = (JSONObject) user;
 
             if (jsonUser.get("id").equals(userId)) {
-                // Switch the type of
+                // Switch the type of student logged in
                 switch (userType) {
                     case UserType.student:
                         // get the jsonArray from the object of the user
@@ -316,13 +316,54 @@ public class Main {
         }
     }
 
+    private static void loadStudentInfo(JSONObject jsonUser, String userId) {
+        // get the jsonArray from the object of the user
+        JSONObject addressObj = (JSONObject) jsonUser.get("address");
+        // cast all the information to string
+        // and pass it all into the array of string that contains the address information
+        String[] address = {(String) addressObj.get("street"), (String) addressObj.get("city"), (String) addressObj.get("cap")};
 
+        // Get the jsonArray of notes from the user object
+        JSONArray notesArray = (JSONArray) jsonUser.get("notes");
+        // Create the note array with length equals to notesArray
+        String[] notes = new String[notesArray.size()];
+        // pass all the item of notesArray (JSONArray) into notes (String[])
+        for (int i = 0; i < notesArray.size(); i++) {
+            notes[i] = (String) notesArray.get(i);
+        }
+
+        // Create the object
+        JSONObject gradesObj = (JSONObject) jsonUser.get("grades");
+        // Create the HashMap which stores the grades
+        // Like this:
+        // "NameOfTheSubject1": ListIntOfGrade1,
+        // "NameOfTheSubject2": ListIntOfGrade2
+        // ...
+        Map<String, List<Integer>> gradesMap = new HashMap<>();
+        // Cycle through all the subject which has grades
+        for (Object key : gradesObj.keySet()) {
+            // get the array of the grades
+            JSONArray gradesArray = (JSONArray) gradesObj.get(key);
+            // Create the list of grades (es: [1,2,3,4,5])
+            List<Integer> gradesList = new ArrayList<>();
+            // Cycle through all the grades of a subject
+            for (Object o : gradesArray) {
+                // Add a grade into the array of grades of a subject
+                gradesList.add(((Long) o).intValue());
+            }
+            // Insert the array of grades of a subject into the hashMap
+            gradesMap.put((String) key, gradesList);
+        }
+
+        // load all the info of the user
+        student.loadInfo(userId, (String)jsonUser.get("password"), (String)jsonUser.get("name"),
+                (String)jsonUser.get("surname"), address, (String)jsonUser.get("classroom"), gradesMap, notes);
+    }
 
     private static void jsonArrayToFile(String fileName, JSONArray jsonArr) {
         // Write the jsonArray into the file
         try (FileWriter fileWriter = new FileWriter(fileName)) {
             fileWriter.write(JSONValue.toJSONString(jsonArr));
-            System.out.println("Oggetto JSON aggiornato e scritto su '" + fileName + "'");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -362,7 +403,7 @@ public class Main {
         // If the name or surname has a length minor than 3,
         // then call the min method to get the minimum length.
         if (name.length() < 3 || surname.length() < 3) {
-            //
+            // Get the min length between the name and surname
             minLength = Math.min(name.length(), surname.length());
         }
 
@@ -470,17 +511,6 @@ public class Main {
         }
 
         return jsonArray;
-    }
-
-    /**
-     * This method permits the new user to create an account.
-     *
-     * @param typeOfUser
-     * @param name
-     * @param surname
-     */
-    private static void register(String typeOfUser,String name, String surname) {
-        System.out.println("register");
     }
 
     /**
