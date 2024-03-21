@@ -32,6 +32,7 @@ public class Admin extends User {
 
 
         jsonObj.put("id", id);
+        jsonObj.put("password", password);
         jsonObj.put("name", name);
         jsonObj.put("surname", surname);
         jsonAddressArray.addLast(address[0]);
@@ -50,22 +51,44 @@ public class Admin extends User {
     /**
      * The method creates a new Parent
      */
-    public void setNewParent(String id, String password, String name, String surname, String[] address, String childId,
-                           String[][] interviews) {
+    static public JSONObject setNewParent(String id, String password, String name, String surname,
+                                          String[] address, String childId) {
+        JSONObject jsonObj = new JSONObject();
+        JSONArray jsonAddressArray = new JSONArray();
+        JSONArray jsonInterviews = new JSONArray();
+
+        jsonObj.put("id", id);
+        jsonObj.put("password", password);
+        jsonObj.put("name", name);
+        jsonObj.put("surname", surname);
+        jsonAddressArray.addLast(address[0]);
+        jsonAddressArray.addLast(address[1]);
+        jsonAddressArray.addLast(address[2]);
+        jsonObj.put("address", jsonAddressArray);
+        jsonObj.put("childId", childId);
+        jsonObj.put("interviews", jsonInterviews);
+
+        return jsonObj;
     }
 
     /**
      * The method creates a new Teacher
      */
-    public void setNewTeacher(String id, String password, String name, String surname, String[] address, String subject,
+    static public JSONObject setNewTeacher(String id, String password, String name, String surname, String[] address, String subject,
                            String[] classrooms) {
         // Implementazione per un utente con un parametro subject
+
+        JSONObject jsonObj = new JSONObject();
+        return jsonObj;
     }
 
     /**
      * The method creates a new Admin
      */
-    public void setNewAdmin(String id, String password, String name, String surname, String[] address, String userType) {
+    static public JSONObject setNewAdmin(String id, String password, String name, String surname,
+                                         String[] address) {
+        JSONObject jsonObj = new JSONObject();
+        return jsonObj;
     }
 }
 

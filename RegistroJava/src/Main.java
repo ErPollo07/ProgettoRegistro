@@ -29,12 +29,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
 
-        String[] accessMenu = {
-                "Cosa vuoi fare?",
-                "[1] - Accedi",
-                "[2] - Registrati"
-        };
-
         String[] studentPrincipalMenu = {
 
         };
@@ -79,7 +73,9 @@ public class Main {
         String new_id = "";
         String new_password = "";
 
+        // Cycle until the user insert the correct id and the password.
         do {
+            // Cycle until the user insert a correct id
             do {
                 System.out.println("inserisci il tuo username o id : ");
                 i_id = scanner.next().toLowerCase();
@@ -94,6 +90,7 @@ public class Main {
             System.out.println("inserisci la tua password : ");
             i_password = scanner.next();
 
+            // Check if the id and password matches with access method
             invalidLogin = access(i_id, i_password);
 
             // If the user inserts an incorrect id or password, tell him.
@@ -127,29 +124,33 @@ public class Main {
         // load all user info
         loadUserInfo(i_id);
 
-
+        // Switch to
         switch (userType) {
             case UserType.student:
+                // If the user is an student
 
                 do {
-                    // Do stuff of the student
+                    // Do stuff of the parent
                 } while(continueToUse);
                 break;
             case UserType.parent:
+                // If the user is an parent
 
                 do {
                     // Do stuff of the parent
                 } while(continueToUse);
                 break;
             case UserType.teacher:
-
+                // If the user is an teacher
 
                 do {
                     // Do stuff of the teacher
                 } while(continueToUse);
                 break;
             case UserType.admin:
+                // If the user is an admin
 
+                // Cycle until the user wants to exit
                 do {
                     switch (printMenu(adminPrincipalMenu)) {
                         case 1:
@@ -159,8 +160,16 @@ public class Main {
                             // View the list of teachers
                             break;
                         case 3:
+                            // TODO for the teacher the admin have to insert the classrooms and the subject
+                            //      If the admin wants to create a parent or a child
+                            //      also he has to create the parent or child
+
+
                             // Create new user
                             String parentId = "";
+                            String childId = "";
+                            String subject = "";
+                            String[] classroom = new String[1];
 
                             // Ask what type of user he wants to create
                             typeOfUser = switch (printMenu(typeOfCreateableUser)) {
@@ -192,14 +201,14 @@ public class Main {
 
                             // if is a student ask all the info of the parent to create the account for it
                             if (typeOfUser.equals("s")) {
-                                // create the parent account
+                                // TODO create the parent account
                             }
 
                             // Create a id
                             // read the stuff json file
                             stuffJson = readJsonObjectFile("JSON/JsonFile/stuff.json");
 
-                            // Get the counter of the id
+                            // Get the counter of the id from stuff.json
                             long counterId = (long) stuffJson.get("countIdNumber");
 
                             // create the id based on the type of user
@@ -214,10 +223,28 @@ public class Main {
                             // read the json file like Students.json, Teachers.json, ...
                             jsonToModify = readJsonArrayFile("JSON/JsonFile/User/Students.json");
 
-                            // Call the method to create an account
-                            user = Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
+                            // Call a specific method to create a specific type of user
+                            user = switch (typeOfUser) {
+                                case "s" -> Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
+                                case "p" -> Admin.setNewParent(new_id, new_password, new_name, new_surname, address, childId);
+                                case "t" -> Admin.setNewTeacher(new_id, new_password, new_name, new_surname, address, "subject", classroom);
+                                case "a" -> Admin.setNewAdmin(new_id, new_password, new_name, new_surname, address);
+                                default -> new JSONObject();
+                            };
 
+                            // add the user created to the file
                             jsonToModify.addLast(user);
+
+                            // Write all changes to the file
+                            switch (typeOfUser) {
+                                case "s" -> jsonArrayToFile("JSON/JsonFile/User/Students.json", jsonToModify);
+                                case "p" -> jsonArrayToFile("JSON/JsonFile/User/Parents.json", jsonToModify);
+                                case "t" -> jsonArrayToFile("JSON/JsonFile/User/Teachers.json", jsonToModify);
+                                case "a" -> jsonArrayToFile("JSON/JsonFile/User/Administrators.json", jsonToModify);
+                            }
+
+                            // Update stuff file
+                            jsonObjectToFile("JSON/JsonFile/stuff.json", stuffJson);
 
                             break;
                         case 4:
@@ -233,8 +260,6 @@ public class Main {
             default:
                 System.out.println("NON VALID USER TYPE");
         }
-
-        jsonArrayToFile("JSON/JsonFile/User/Students.json", jsonToModify);
     }
 
     private static void loadUserInfo(String userId) {
@@ -372,6 +397,15 @@ public class Main {
         }
     }
 
+    private static void jsonObjectToFile(String fileName, JSONObject jsonObj) {
+        // Write the jsonArray into the file
+        try (FileWriter fileWriter = new FileWriter(fileName)) {
+            fileWriter.write(JSONValue.toJSONString(jsonObj));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Returns the new password for a new user.
      * <br>
@@ -423,6 +457,7 @@ public class Main {
     private static boolean access(String i_id, String i_password) {
         String filePath = "";
 
+        // open the file where is the user based on the first letter of the id
         switch (i_id.charAt(0)) {
             case 's':
                 filePath = "JSON/JsonFile/User/Students.json";
@@ -475,6 +510,12 @@ public class Main {
         return false;
     }
 
+    /**
+     * Read a file and parse it into json object.
+     *
+     * @param fileName
+     * @return the json object with the information of the file
+     */
     private static JSONObject readJsonObjectFile(String fileName) {
         // Create the json parser
         JSONParser jsonParser = new JSONParser();
@@ -567,4 +608,6 @@ DATE       BRANCH                 AUTHOR     COMMENT
 19/03/2024 DeleteRegisterMethod   Nicola     Add a do-while to repeat the main cycle of all the user,
                                              Done loadInfo method
                                              which loads the info of the user from the json file to the User class variable
+21/03/2024 DeleteRegisterMethod   Nicola     Add jsonObjectToFile, now all the file will be written.
+                                             Now all the user can be created
 */
