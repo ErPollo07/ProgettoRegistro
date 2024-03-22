@@ -1,15 +1,1 @@
-[
-  {
-    "id": "idValue",
-    "password": "pw",
-    "name": "name",
-    "surname": "surname",
-    "address": {
-      "street": "streetName",
-      "city": "cityName",
-      "cap": "cap"
-    },
-    "subject": "subject",
-    "classrooms": ["3E", "4F", "1C"]
-  }
-]
+[{"password":"pw","address":{"cap":"cap","city":"cityName","street":"streetName"},"surname":"surname","subject":"subject","name":"name","id":"t1","classrooms":["3E"]},{},{},{},{}]

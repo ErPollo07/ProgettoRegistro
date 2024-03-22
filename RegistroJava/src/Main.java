@@ -3,20 +3,25 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Array;
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class Main {
+    static Scanner scanner = new Scanner(System.in);
 
     static JSONArray usersJsonArray = new JSONArray(); // the file os users. Es: Students, Teachers, ...
     static JSONObject agendaJson = new JSONObject(); // the file of the agenda
     static JSONObject classroomsJson = new JSONObject(); // the file of the classroom with all the students
     static JSONObject stuffJson = new JSONObject(); // the file which contains the stuff
 
-    enum UserType {student, parent, teacher, admin};
+    enum UserType {student, parent, teacher, admin}
+
+    ;
     static UserType userType;
 
     static Student student;
@@ -24,6 +29,8 @@ public class Main {
     static Parent parent;
     static Admin admin;
 
+    static boolean incorrectValue; // Bool to verify the validity of an inserction
+    static boolean continueToInsert; // Bool to verify the validity of an inserction
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -66,12 +73,14 @@ public class Main {
         // Variable for creating new user
         JSONArray jsonToModify = new JSONArray();
         JSONObject user; // the obj of the user which we want to create
+        enum EnumTypeOfUser {s, p, t, a}
         String typeOfUser = "";
         String new_name = "";
         String new_surname = "";
         String[] address = new String[3];
         String new_id = "";
         String new_password = "";
+        String subject = "";
 
         // Cycle until the user insert the correct id and the password.
         do {
@@ -131,21 +140,21 @@ public class Main {
 
                 do {
                     // Do stuff of the parent
-                } while(continueToUse);
+                } while (continueToUse);
                 break;
             case UserType.parent:
                 // If the user is an parent
 
                 do {
                     // Do stuff of the parent
-                } while(continueToUse);
+                } while (continueToUse);
                 break;
             case UserType.teacher:
                 // If the user is an teacher
 
                 do {
                     // Do stuff of the teacher
-                } while(continueToUse);
+                } while (continueToUse);
                 break;
             case UserType.admin:
                 // If the user is an admin
@@ -160,22 +169,24 @@ public class Main {
                             // View the list of teachers
                             break;
                         case 3:
-                            // TODO for the teacher the admin have to insert the classrooms and the subject
+                            // TODO for the teacher, the admin have to insert the classrooms and the subject
                             //      If the admin wants to create a parent or a child
                             //      also he has to create the parent or child
 
+                            // Read the stuff json file
+                            stuffJson = readJsonObjectFile("JSON/JsonFile/stuff.json");
 
                             // Create new user
                             String parentId = "";
                             String childId = "";
-                            String subject = "";
-                            String[] classroom = new String[1];
+                            String[] classrooms = new String[1];
+                            int indexClassrooms = 0;
 
                             // Ask what type of user he wants to create
                             typeOfUser = switch (printMenu(typeOfCreateableUser)) {
                                 case 1 -> "s";
-                                case 2 -> "t";
-                                case 3 -> "p";
+                                case 2 -> "p";
+                                case 3 -> "t";
                                 case 4 -> "a";
                                 default -> "None";
                             };
@@ -197,16 +208,66 @@ public class Main {
                             address[1] = scanner.next();
                             // - cap
                             System.out.println("inserisci il cap della citta' in cui abita: ");
-                            address[2] = (String) scanner.next();
+                            address[2] = scanner.next();
+
+                            if (typeOfUser.equals("t")) {
+                                // insertion of the subject
+                                do {
+                                    incorrectValue = false;
+
+                                    // Get the subject from the user
+                                    subject = getString("Inserisci la materia del professore di cui stai creando l'account.");
+
+                                    if (!verifySubject(subject)) {
+                                        System.out.println("La materia che hai inserito non e' valida");
+                                        incorrectValue = true;
+                                    }
+                                } while (incorrectValue);
+
+                                // Insertion of the classrooms
+                                do {
+                                    continueToInsert = true;
+                                    // this cycle is to check if the value, that the admin inserts, is correct.
+                                    do {
+                                        incorrectValue = false;
+
+                                        System.out.println("Inserisci la classe che ha questo/a professore/ssa: ");
+                                        classrooms[indexClassrooms] = scanner.next();
+
+                                        if (classrooms[indexClassrooms].equals("q")) {
+                                            continueToInsert = false;
+                                        } else if (classrooms[indexClassrooms].length() < 2) {
+                                            System.out.println("Devi inserire la classe in questo formato <numero><sezione>.");
+                                            incorrectValue = true;
+                                        } else if (!verifyClassroom(classrooms[indexClassrooms]) &&
+                                                !classrooms[indexClassrooms].equals("q")) {
+                                            System.out.println("Devi inserire la classe in questo formato <numero><sezione>.");
+                                            incorrectValue = true;
+                                        } else {
+                                            indexClassrooms++; // Update the index of the classrooms array
+
+                                            // If the classrooms array is full add another space
+                                            if (classrooms.length == indexClassrooms) {
+                                                String[] arr = new String[classrooms.length + 1];
+                                                classrooms = arr;
+                                            }
+                                        }
+                                    } while (incorrectValue);
+
+                                    // If the admin wants to finish inserting the teacher's classrooms
+                                    // but has not inserted even one
+                                    // then tell him that he must insert at least one classroom.
+                                    if (!continueToInsert && indexClassrooms < 1) {
+                                        System.out.println("Devi inserire almento una materia");
+                                        continueToInsert = true;
+                                    }
+                                } while (continueToInsert);
+                            }
 
                             // if is a student ask all the info of the parent to create the account for it
                             if (typeOfUser.equals("s")) {
                                 // TODO create the parent account
                             }
-
-                            // Create a id
-                            // read the stuff json file
-                            stuffJson = readJsonObjectFile("JSON/JsonFile/stuff.json");
 
                             // Get the counter of the id from stuff.json
                             long counterId = (long) stuffJson.get("countIdNumber");
@@ -215,19 +276,28 @@ public class Main {
                             new_id = typeOfUser + counterId;
 
                             // upgrade the counter
-                            stuffJson.replace("countIdNumber", counterId+1);
+                            stuffJson.replace("countIdNumber", counterId + 1);
 
                             // Create a password
                             new_password = crateNewPassword(new_name, new_surname, new_id);
 
-                            // read the json file like Students.json, Teachers.json, ...
-                            jsonToModify = readJsonArrayFile("JSON/JsonFile/User/Students.json");
+                            // read the json file (Students.json, Teachers.json, ...)
+                            jsonToModify = switch (typeOfUser) {
+                                case "s" -> readJsonArrayFile("JSON/JsonFile/User/Students.json");
+                                case "p" -> readJsonArrayFile("JSON/JsonFile/User/Parents.json");
+                                case "t" -> readJsonArrayFile("JSON/JsonFile/User/Teachers.json");
+                                case "a" -> readJsonArrayFile("JSON/JsonFile/User/Administrators.json");
+                                default -> new JSONArray();
+                            };
 
                             // Call a specific method to create a specific type of user
                             user = switch (typeOfUser) {
-                                case "s" -> Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
-                                case "p" -> Admin.setNewParent(new_id, new_password, new_name, new_surname, address, childId);
-                                case "t" -> Admin.setNewTeacher(new_id, new_password, new_name, new_surname, address, "subject", classroom);
+                                case "s" ->
+                                        Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
+                                case "p" ->
+                                        Admin.setNewParent(new_id, new_password, new_name, new_surname, address, childId);
+                                case "t" ->
+                                        Admin.setNewTeacher(new_id, new_password, new_name, new_surname, address, subject, classrooms);
                                 case "a" -> Admin.setNewAdmin(new_id, new_password, new_name, new_surname, address);
                                 default -> new JSONObject();
                             };
@@ -243,6 +313,8 @@ public class Main {
                                 case "a" -> jsonArrayToFile("JSON/JsonFile/User/Administrators.json", jsonToModify);
                             }
 
+                            System.out.println("Account registrato correttamente");
+
                             // Update stuff file
                             jsonObjectToFile("JSON/JsonFile/stuff.json", stuffJson);
 
@@ -253,13 +325,65 @@ public class Main {
                         default:
                             System.out.println("NOT VALID OPTION");
                     }
-                } while(continueToUse);
+                } while (continueToUse);
 
 
                 break;
             default:
                 System.out.println("NON VALID USER TYPE");
         }
+    }
+
+    private static boolean verifyClassroom(String classroom) {
+        String classroomNumber = String.valueOf(classroom.charAt(0));
+        char section = classroom.charAt(1);
+
+        try {
+            Integer.parseInt(classroomNumber);
+            if (section <= 'A' || section >= 'Z') {
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean verifySubject(String sub) {
+        JSONArray subjects = (JSONArray) stuffJson.get("subject");
+
+        // Cycle through all the possible subjects
+        for (Object subject : subjects) {
+            String strSubject = (String) subject;
+
+            // If the name a subject in the array of subjects is equal to the one which the user inserts,
+            // return true because it means that the subject is correct
+            if (sub.toLowerCase().equals(subject)) {
+                return true;
+            }
+        }
+
+        // If the user inserts a non-valid subject,
+        // return false
+        return false;
+    }
+
+    private static String getString(String message) {
+        String output = "";
+
+        do {
+            incorrectValue = false;
+            try {
+                System.out.println(message);
+                output = scanner.next();
+            } catch (Exception e) {
+                System.out.println("Hai inserito un valore non valido. Riprova.");
+                incorrectValue = true;
+            }
+        } while (incorrectValue);
+
+        return output;
     }
 
     private static void loadUserInfo(String userId) {
@@ -298,7 +422,6 @@ public class Main {
             }
         }
     }
-
 
 
     private static void loadStudentInfo(JSONObject jsonUser, String userId) {
@@ -341,15 +464,15 @@ public class Main {
         }
 
         // load all the info of the user
-        student.loadInfo(userId, (String)jsonUser.get("password"), (String)jsonUser.get("name"),
-                (String)jsonUser.get("surname"), address, (String)jsonUser.get("classroom"), gradesMap, notes);
+        student.loadInfo(userId, (String) jsonUser.get("password"), (String) jsonUser.get("name"),
+                (String) jsonUser.get("surname"), address, (String) jsonUser.get("classroom"), gradesMap, notes);
     }
 
     private static void loadParentInfo(JSONObject jsonUser, String userId) {
-        String pw =(String) jsonUser.get("password");
-        String name =(String) jsonUser.get("name");
-        String surname =(String) jsonUser.get("surname");
-        String childId =(String) jsonUser.get("childId");
+        String pw = (String) jsonUser.get("password");
+        String name = (String) jsonUser.get("name");
+        String surname = (String) jsonUser.get("surname");
+        String childId = (String) jsonUser.get("childId");
 
         JSONObject jsonAddress = (JSONObject) jsonUser.get("address");
         String[] address = {(String) jsonAddress.get("streetName"), (String) jsonAddress.get("city"),
@@ -376,7 +499,7 @@ public class Main {
             interviews.add(interviewMap);
         }
 
-        parent.loadInfo(userId, pw,name,surname, address,childId, interviews);
+        parent.loadInfo(userId, pw, name, surname, address, childId, interviews);
     }
 
     private static void loadTeacherInfo(JSONObject jsonUser, String userId) {
@@ -417,11 +540,11 @@ public class Main {
      *     name: "Sofia", surname: "Baggio", id: "P74638294"
      *     => password: "SOFBAG74638294"
      * </pre>
-     *
-     *  But If you have a name or surname minor than 3 letters.
-     *  <br>
-     *  Examples:
-     *  <pre>
+     * <p>
+     * But If you have a name or surname minor than 3 letters.
+     * <br>
+     * Examples:
+     * <pre>
      *      name: "Ya", surname: "Carim", id: "S745839
      *      => password: "YACAR745839"
      *
@@ -429,9 +552,9 @@ public class Main {
      *      => password: "GIOBA4839334"
      *  </pre>
      *
-     * @param name the name of a user
+     * @param name    the name of a user
      * @param surname the surname of a user
-     * @param id the id of a user
+     * @param id      the id of a user
      * @return the password of the specified user
      */
     private static String crateNewPassword(String name, String surname, String id) {
@@ -535,7 +658,6 @@ public class Main {
     }
 
     /**
-     *
      * @param fileName
      * @return
      */

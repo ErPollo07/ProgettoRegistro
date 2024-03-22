@@ -74,44 +74,5 @@
         3
       ]
     }
-  },
-  {
-    "address": [
-      "v",
-      "c",
-      "4535"
-    ],
-    "surname": "c",
-    "name": "n",
-    "id": "s0",
-    "parentId": ""
-  },
-  {
-    "address": [
-      "v",
-      "c",
-      "345324"
-    ],
-    "notes": [],
-    "surname": "c",
-    "name": "n",
-    "classroom": "",
-    "id": "s0",
-    "grades": [],
-    "parentId": ""
-  },
-  {
-    "address": [
-      "v",
-      "c",
-      "245234"
-    ],
-    "notes": [],
-    "surname": "c",
-    "name": "n",
-    "classroom": "",
-    "id": "s0",
-    "grades": [],
-    "parentId": ""
   }
 ]
