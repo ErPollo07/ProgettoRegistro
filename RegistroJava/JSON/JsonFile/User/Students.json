@@ -17,23 +17,46 @@
     "id": "s1",
     "grades": {
       "italian": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
+        {
+          "date": "date",
+          "grade": "grade"
+        },
+        {
+          "date": "date",
+          "grade": "grade"
+        },
+        {
+          "date": "date",
+          "grade": "grade"
+        }
       ],
       "math": [
-        1,
-        2,
-        3,
-        4
+        {
+          "date": "date",
+          "grade": "grade"
+        },
+        {
+          "date": "date",
+          "grade": "grade"
+        },
+        {
+          "date": "date",
+          "grade": "grade"
+        }
       ],
       "informatics": [
-        1,
-        2,
-        3
+        {
+          "date": "date",
+          "grade": "grade"
+        },
+        {
+          "date": "date",
+          "grade": "grade"
+        },
+        {
+          "date": "date",
+          "grade": "grade"
+        }
       ]
     }
   }

@@ -26,14 +26,19 @@ public class Main {
     static Admin admin;
 
     static boolean incorrectValue; // Bool to verify the validity of an inserction
-    static boolean continueToInsert; // Bool to verify the validity of an inserction
+    static boolean continueToInsert; // Bool to verify if the user wants to continue a cycle
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
 
         String[] studentPrincipalMenu = {
-
+                "MENU PRINCIPALE",
+                "Visualizza voti",
+                "Visuializza agenda",
+                "Visualizza lezioni",
+                "Visualizza informazioni account",
+                "Esci"
         };
 
         String[] parentPrincipalMenu = {
@@ -46,18 +51,18 @@ public class Main {
 
         String[] adminPrincipalMenu = {
                 "MENU PRINCIPALE",
-                "[1] - Visualizza gli studenti di una classe",
-                "[2] - Visualizza elenco insegnanti",
-                "[3] - Crea nuovo utente",
-                "[4] - Esci"
+                "Visualizza gli studenti di una classe",
+                "Visualizza elenco insegnanti",
+                "Crea nuovo utente",
+                "Esci"
         };
 
-        String[] typeOfCreateableUser = {
+        String[] typeOfCreateableUserMenu = {
                 "Che tipo di studente vuoi creare?",
-                "[1] - Studente",
-                "[2] - Genitore",
-                "[3] - Insegnante",
-                "[4] - Amministratore"
+                "Studente",
+                "Genitore",
+                "Insegnante",
+                "Amministratore"
         };
 
         // Variable for login
@@ -132,15 +137,28 @@ public class Main {
         // Switch to
         switch (userType) {
             case UserType.student:
-                // If the user is an student
-
                 do {
-                    // Do stuff of the parent
+                    switch (printMenu(studentPrincipalMenu)) {
+                        case 1:
+                            System.out.println("Visualizza voti");
+                            break;
+                        case 2:
+                            System.out.println("Visuializza agenda");
+                            break;
+                        case 3:
+                            System.out.println("Visualizza lezioni");
+                            break;
+                        case 4:
+                            System.out.println("Visualizza informazioni account");
+                            break;
+                        case 5:
+                            System.out.println("Esci");
+                            continueToUse = false;
+                            break;
+                    }
                 } while (continueToUse);
                 break;
             case UserType.parent:
-                // If the user is an parent
-
                 do {
                     // Do stuff of the parent
                 } while (continueToUse);
@@ -183,7 +201,7 @@ public class Main {
                             int indexClassrooms = 0;
 
                             // Ask what type of user he wants to create
-                            typeOfUser = switch (printMenu(typeOfCreateableUser)) {
+                            typeOfUser = switch (printMenu(typeOfCreateableUserMenu)) {
                                 case 1 -> "s";
                                 case 2 -> "p";
                                 case 3 -> "t";
@@ -757,7 +775,7 @@ public class Main {
             System.out.println(); // go on the next line
 
             for (int i = 1; i < option.length; i++) {
-                System.out.println(option[i]);
+                System.out.println("[" + i + "] - " + option[i]);
             }
 
             System.out.println("\nInserisci la scelta: ");
