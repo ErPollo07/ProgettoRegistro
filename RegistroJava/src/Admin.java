@@ -24,12 +24,11 @@ public class Admin extends User {
     /**
      * The method creates a new Student
      */
-    static public JSONObject setNewStudent(String id, String password, String name, String surname, String[] address, String parentId) {
+    static public JSONObject setNewStudent(String id, String password, String name, String surname, String[] address, String classroom, String parentId) {
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonAddressArray = new JSONArray();
         JSONArray jsonGradesArray = new JSONArray();
         JSONArray jsonNotesArray = new JSONArray();
-
 
         jsonObj.put("id", id);
         jsonObj.put("password", password);
@@ -40,7 +39,7 @@ public class Admin extends User {
         jsonAddressArray.addLast(address[2]);
         jsonObj.put("address", jsonAddressArray);
         jsonObj.put("parentId", parentId);
-        jsonObj.put("classroom", "");
+        jsonObj.put("classroom", classroom);
         jsonObj.put("grades", jsonGradesArray);
         jsonObj.put("notes", jsonNotesArray);
 
@@ -54,17 +53,17 @@ public class Admin extends User {
     static public JSONObject setNewParent(String id, String password, String name, String surname,
                                           String[] address, String childId) {
         JSONObject jsonObj = new JSONObject();
-        JSONArray jsonAddressArray = new JSONArray();
+        JSONObject jsonAddress = new JSONObject();
         JSONArray jsonInterviews = new JSONArray();
 
         jsonObj.put("id", id);
         jsonObj.put("password", password);
         jsonObj.put("name", name);
         jsonObj.put("surname", surname);
-        jsonAddressArray.addLast(address[0]);
-        jsonAddressArray.addLast(address[1]);
-        jsonAddressArray.addLast(address[2]);
-        jsonObj.put("address", jsonAddressArray);
+        jsonAddress.put("street", address[0]);
+        jsonAddress.put("city", address[1]);
+        jsonAddress.put("cap", address[2]);
+        jsonObj.put("address", jsonAddress);
         jsonObj.put("childId", childId);
         jsonObj.put("interviews", jsonInterviews);
 
@@ -76,7 +75,7 @@ public class Admin extends User {
      */
     static public JSONObject setNewTeacher(String id, String password, String name, String surname, String[] address, String subject,
                            String[] classrooms) {
-        // Implementazione per un utente con un parametro subject
+
 
         JSONObject jsonObj = new JSONObject();
         return jsonObj;

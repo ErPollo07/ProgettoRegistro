@@ -7,8 +7,6 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Array;
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class Main {
@@ -20,8 +18,6 @@ public class Main {
     static JSONObject stuffJson = new JSONObject(); // the file which contains the stuff
 
     enum UserType {student, parent, teacher, admin}
-
-    ;
     static UserType userType;
 
     static Student student;
@@ -71,7 +67,7 @@ public class Main {
         boolean continueToUse = true;
 
         // Variable for creating new user
-        JSONArray jsonToModify = new JSONArray();
+        JSONArray jsonToModify;
         JSONObject user; // the obj of the user which we want to create
         enum EnumTypeOfUser {s, p, t, a}
         String typeOfUser = "";
@@ -169,15 +165,19 @@ public class Main {
                             // View the list of teachers
                             break;
                         case 3:
-                            // TODO for the teacher, the admin have to insert the classrooms and the subject
-                            //      If the admin wants to create a parent or a child
-                            //      also he has to create the parent or child
-
                             // Read the stuff json file
                             stuffJson = readJsonObjectFile("JSON/JsonFile/stuff.json");
 
                             // Create new user
+                            // Variable for create the parent
                             String parentId = "";
+                            String parentPw = "";
+                            String parentName = "";
+                            String parentSurname = "";
+                            String[] parentAddress = new String[3];
+                            List<Map<String, String>> parentInterviews = new ArrayList<>();
+                            // -----
+                            String studentClassroom = "";
                             String childId = "";
                             String[] classrooms = new String[1];
                             int indexClassrooms = 0;
@@ -204,12 +204,21 @@ public class Main {
                             System.out.println("inserisci la via in cui abita in nuovo utente: ");
                             address[0] = scanner.next();
                             // - cityName
-                            System.out.println("inserisci la citta' in cui abita: ");
+                            System.out.println("Inserisci la citta' in cui abita: ");
                             address[1] = scanner.next();
                             // - cap
-                            System.out.println("inserisci il cap della citta' in cui abita: ");
+                            System.out.println("Inserisci il cap della citta' in cui abita: ");
                             address[2] = scanner.next();
 
+                            if (typeOfUser.equals("s")) {
+                                do {
+                                    System.out.println("Inserisci la classe dello studente: ");
+                                    studentClassroom = scanner.next();
+                                } while (verifyClassroom(studentClassroom));
+                            }
+
+                            // If the type of user to create is a teacher,
+                            // the admin have to insert the subject and the classroom
                             if (typeOfUser.equals("t")) {
                                 // insertion of the subject
                                 do {
@@ -266,7 +275,23 @@ public class Main {
 
                             // if is a student ask all the info of the parent to create the account for it
                             if (typeOfUser.equals("s")) {
-                                // TODO create the parent account
+                                System.out.println("Studente registrato correttamente.");
+                                System.out.println("Registra anche il suo genitore: ");
+
+                                System.out.println("Inserisci il nome del genitore: ");
+                                parentName = scanner.next();
+
+                                System.out.println("Inserisci in cognome del genitore: ");
+                                parentSurname = scanner.next();
+                                // street
+                                System.out.println("Inserisci la via in cui abita il genitore: ");
+                                parentAddress[0] = scanner.next();
+                                // city
+                                System.out.println("Inserisci la citta' in cui abita: ");
+                                parentAddress[1] = scanner.next();
+                                // - cap
+                                System.out.println("Inserisci il cap della citta' in cui abita: ");
+                                parentAddress[2] = scanner.next();
                             }
 
                             // Get the counter of the id from stuff.json
@@ -278,8 +303,20 @@ public class Main {
                             // upgrade the counter
                             stuffJson.replace("countIdNumber", counterId + 1);
 
+                            // create the parent Id if the type of user is a student
+                            if (typeOfUser.equals("s")) {
+                                // Get the counter of the id from stuff.json
+                                counterId = (long) stuffJson.get("countIdNumber");
+
+                                // Create the parentId
+                                parentId = "p" + counterId;
+
+                                // Upgrade the counter
+                                stuffJson.replace("countIdNumber", counterId + 1);
+                            }
+
                             // Create a password
-                            new_password = crateNewPassword(new_name, new_surname, new_id);
+                            new_password = createNewPassword(new_name, new_surname, new_id);
 
                             // read the json file (Students.json, Teachers.json, ...)
                             jsonToModify = switch (typeOfUser) {
@@ -293,7 +330,7 @@ public class Main {
                             // Call a specific method to create a specific type of user
                             user = switch (typeOfUser) {
                                 case "s" ->
-                                        Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, parentId);
+                                        Admin.setNewStudent(new_id, new_password, new_name, new_surname, address, studentClassroom, parentId);
                                 case "p" ->
                                         Admin.setNewParent(new_id, new_password, new_name, new_surname, address, childId);
                                 case "t" ->
@@ -313,7 +350,18 @@ public class Main {
                                 case "a" -> jsonArrayToFile("JSON/JsonFile/User/Administrators.json", jsonToModify);
                             }
 
-                            System.out.println("Account registrato correttamente");
+                            if (typeOfUser.equals("s")) {
+                                jsonToModify = readJsonArrayFile("JSON/JsonFile/User/Parents.json");
+
+                                // Create a password for the parent
+                                parentPw = createNewPassword(parentName, parentSurname, parentId);
+
+                                user = Admin.setNewParent(parentId, parentPw, parentName, parentSurname, parentAddress, new_id);
+                                jsonToModify.addLast(user);
+                                jsonArrayToFile("JSON/JsonFile/User/Parents.json", jsonToModify);
+                            }
+
+                            System.out.println("Account registrato correttamente.");
 
                             // Update stuff file
                             jsonObjectToFile("JSON/JsonFile/stuff.json", stuffJson);
@@ -387,10 +435,8 @@ public class Main {
     }
 
     private static void loadUserInfo(String userId) {
-        JSONArray usersJson = new JSONArray();
-
         // Read the correct file where extract all the user of the same type of the user which we want to search
-        usersJson = switch (userType) {
+        usersJsonArray = switch (userType) {
             case UserType.student -> readJsonArrayFile("JSON/JsonFile/User/Students.json");
             case UserType.parent -> readJsonArrayFile("JSON/JsonFile/User/Parents.json");
             case UserType.teacher -> readJsonArrayFile("JSON/JsonFile/User/Teachers.json");
@@ -398,7 +444,7 @@ public class Main {
         };
 
         // Search for the correct user
-        for (Object user : usersJson) {
+        for (Object user : usersJsonArray) {
             JSONObject jsonUser = (JSONObject) user;
 
             if (jsonUser.get("id").equals(userId)) {
@@ -557,7 +603,7 @@ public class Main {
      * @param id      the id of a user
      * @return the password of the specified user
      */
-    private static String crateNewPassword(String name, String surname, String id) {
+    private static String createNewPassword(String name, String surname, String id) {
         int minLength = 3;
 
         // If the name or surname has a length minor than 3,
@@ -567,8 +613,13 @@ public class Main {
             minLength = Math.min(name.length(), surname.length());
         }
 
+        String namePart = name.substring(0, minLength).toUpperCase();
+        String surnamePart = surname.substring(0, minLength).toUpperCase();
+        String idPart = id.substring(1);
+
+
         // Return the password with <first 3 characters of name><first 3 characters of surname><the id of the user>
-        return name.substring(0, minLength - 1).toUpperCase() + surname.substring(0, minLength - 1).toUpperCase() + id.substring(1);
+        return namePart + surnamePart + idPart;
     }
 
     /**
@@ -731,5 +782,7 @@ DATE       BRANCH                 AUTHOR     COMMENT
                                              Done loadInfo method
                                              which loads the info of the user from the json file to the User class variable
 21/03/2024 DeleteRegisterMethod   Nicola     Add jsonObjectToFile, now all the file will be written.
-                                             Now all the user can be created
+                                             Now all the user can be created.
+22/03/2024 DeleteRegisterMethod   Nicola     Added the constraint to the admin that when he creates a teacher
+                                             he must insert the subject and the class in which he teaches.
 */
