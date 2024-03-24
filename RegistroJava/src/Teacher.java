@@ -1,5 +1,21 @@
 public class Teacher extends User {
 
+    private String subject;
+    public String getSubject() {
+        return subject;
+    }
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    private String[] classrooms;
+    public String[] getClassrooms() {
+        return classrooms;
+    }
+    public void setClassrooms(String[] classrooms) {
+        this.classrooms = classrooms;
+    }
+
     /**
      * This method put the grade on the array of grades of
      * the specified subject of the user with id equals to studentId.
@@ -80,3 +96,8 @@ public class Teacher extends User {
 
     }
 }
+
+/* CHANGELOG
+DATE       BRANCH                 AUTHOR     COMMENT
+24/03/2024 DeleteRegisterMethod   Nicola     Move from User to this file all the attribute specified for the teacher
+*/

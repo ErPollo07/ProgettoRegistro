@@ -3,6 +3,38 @@ import java.util.Map;
 
 public class Student extends User {
 
+    private String classroom;
+    public String getClassroom() {
+        return classroom;
+    }
+    public void setClassroom(String classroom) {
+        this.classroom = classroom;
+    }
+
+    private String[] notes;
+    public String[] getNotes() {
+        return notes;
+    }
+    public void setNotes(String[] notes) {
+        this.notes = notes;
+    }
+
+    private String parentId;
+    public String getParentId() {
+        return parentId;
+    }
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    private Map<String, List<Integer>> grades;
+    public Map<String, List<Integer>> getGrades() {
+        return grades;
+    }
+    public void setGrades(Map<String, List<Integer>> grades) {
+        this.grades = grades;
+    }
+
     /**
      * If I put the studentId = "S000001" and subject = "math"
      * the method returns all the grades of the student, with the id = studentId, in the specified subject
@@ -63,3 +95,8 @@ public class Student extends User {
         setNotes(notes);
     }
 }
+
+/* CHANGELOG
+DATE       BRANCH                 AUTHOR     COMMENT
+24/03/2024 DeleteRegisterMethod   Nicola     Move from User to this file all the attribute specified for the student
+*/

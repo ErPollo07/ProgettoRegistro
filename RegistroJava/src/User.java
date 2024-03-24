@@ -35,14 +35,6 @@ public class User {
         this.password = password;
     }
 
-    private String parentId;
-    public String getParentId() {
-        return parentId;
-    }
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
     private String[] address;
     public String[] getAddress() {
         return address;
@@ -50,50 +42,10 @@ public class User {
     public void setAddress(String[] address) {
         this.address = address;
     }
-
-    private String classroom;
-    public String getClassroom() {
-        return classroom;
-    }
-    public void setClassroom(String classroom) {
-        this.classroom = classroom;
-    }
-
-    private Map<String, List<Integer>> grades;
-    public Map<String, List<Integer>> getGrades() {
-        return grades;
-    }
-    public void setGrades(Map<String, List<Integer>> grades) {
-        this.grades = grades;
-    }
-
-    private String[] notes;
-    public String[] getNotes() {
-        return notes;
-    }
-    public void setNotes(String[] notes) {
-        this.notes = notes;
-    }
-
-    private String subject;
-    public String getSubject() {
-        return subject;
-    }
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    private String[] classrooms;
-    public String[] getClassrooms() {
-        return classrooms;
-    }
-    public void setClassrooms(String[] classrooms) {
-        this.classrooms = classrooms;
-    }
-
 }
 
 /* CHANGELOG
 DATE       BRANCH                 AUTHOR     COMMENT
 19/03/2024 DeleteRegisterMethod   Nicola     Generate all the getters and setters for all the variable
+24/03/2024 DeleteRegisterMethod   Nicola     Move all the attributes which are specified for a user in the correct class
 */
