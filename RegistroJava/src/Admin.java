@@ -1,7 +1,47 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class Admin extends User {
+public class Admin {
+
+    private String userId;
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    private String name;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String surname;
+    public String getSurname() {
+        return surname;
+    }
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    private String password;
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    private String[] address;
+    public String[] getAddress() {
+        return address;
+    }
+    public void setAddress(String[] address) {
+        this.address = address;
+    }
 
     /**
      * If I pass classroom = "3E", the method will return the list of name and surname of the students of the class 3E
