@@ -20,6 +20,8 @@ public class Main {
     enum UserType {student, parent, teacher, admin}
     static UserType userType;
 
+    // These classes are used when a user log-in and all the attribute
+    // of one class, it depends on the type of user the user is, will fill up
     static Student student;
     static Teacher teacher;
     static Parent parent;
@@ -66,7 +68,7 @@ public class Main {
         };
 
         // Variable for login
-        String i_id, i_password;
+        String currentUserId, courrentUserPw;
         boolean invalidLogin = false;
 
         boolean continueToUse = true;
@@ -74,7 +76,6 @@ public class Main {
         // Variable for creating new user
         JSONArray jsonToModify;
         JSONObject user; // the obj of the user which we want to create
-        enum EnumTypeOfUser {s, p, t, a}
         String typeOfUser = "";
         String new_name = "";
         String new_surname = "";
@@ -88,31 +89,31 @@ public class Main {
             // Cycle until the user insert a correct id
             do {
                 System.out.println("inserisci il tuo username o id : ");
-                i_id = scanner.next().toLowerCase();
+                currentUserId = scanner.next().toLowerCase();
 
-                if (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
-                        i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a') {
+                if (currentUserId.charAt(0) != 's' && currentUserId.charAt(0) != 't' &&
+                        currentUserId.charAt(0) != 'p' && currentUserId.charAt(0) != 'a') {
                     System.out.println("L'id che hai inserito non e' valido. Riprova.");
                 }
-            } while (i_id.charAt(0) != 's' && i_id.charAt(0) != 't' &&
-                    i_id.charAt(0) != 'p' && i_id.charAt(0) != 'a');
+            } while (currentUserId.charAt(0) != 's' && currentUserId.charAt(0) != 't' &&
+                    currentUserId.charAt(0) != 'p' && currentUserId.charAt(0) != 'a');
 
             System.out.println("inserisci la tua password : ");
-            i_password = scanner.next();
+            courrentUserPw = scanner.next();
 
             // Check if the id and password matches with access method
-            invalidLogin = access(i_id, i_password);
+            invalidLogin = access(currentUserId, courrentUserPw);
 
             // If the user inserts an incorrect id or password, tell him.
             if (!invalidLogin) {
-                System.out.println("You insert an incorrect id or password");
+                System.out.println("Hai inserito la password o l'username incorretti");
             }
         } while (!invalidLogin);
 
         System.out.println("Accesso eseguito!");
 
         // evaluate what type of user is the one who logged in, and instantiate the correct object
-        switch (i_id.charAt(0)) {
+        switch (currentUserId.charAt(0)) {
             case 's':
                 userType = UserType.student;
                 student = new Student();
@@ -132,7 +133,7 @@ public class Main {
         }
 
         // load all user info
-        loadUserInfo(i_id);
+        loadUserInfo(currentUserId);
 
         // Switch to
         switch (userType) {
@@ -452,6 +453,13 @@ public class Main {
         return output;
     }
 
+    /**
+     * This method load the info of the user with id equals to {@code userId} param,
+     * and load it in a global class student, teacher, parent, admin depends on the user type. <br>
+     * For Example: if the user with id equals to userId is a student the method loads all the information on
+     * the global class student.
+     * @param userId the id of the user which we want load the info.
+     * */
     private static void loadUserInfo(String userId) {
         // Read the correct file where extract all the user of the same type of the user which we want to search
         usersJsonArray = switch (userType) {
@@ -575,6 +583,11 @@ public class Main {
 
     }
 
+    /**
+     * Write a JSONArray in a file.
+     * @param fileName path of the file which we want to write on the JSONArray
+     * @param jsonArr the JSONArray which we want to write on the file
+     */
     private static void jsonArrayToFile(String fileName, JSONArray jsonArr) {
         // Write the jsonArray into the file
         try (FileWriter fileWriter = new FileWriter(fileName)) {
@@ -584,6 +597,11 @@ public class Main {
         }
     }
 
+    /**
+     * Write a JSONObject in a file.
+     * @param fileName path of the file which we want to write on the JSONObject
+     * @param jsonObj the JSONObject which we want to write on the file
+     */
     private static void jsonObjectToFile(String fileName, JSONObject jsonObj) {
         // Write the jsonArray into the file
         try (FileWriter fileWriter = new FileWriter(fileName)) {
@@ -641,44 +659,31 @@ public class Main {
     }
 
     /**
-     * Method to login in the register
-     *
-     * @param i_id
-     * @param i_password
+     * Method to read all the json file where all the info of
+     * one type of user is stored.
+     * @param id the id which the user type to log-in
+     * @param pw the password which the user type to log-in
+     * @return true if the access is correct, false if it is incorrect
      */
-    private static boolean access(String i_id, String i_password) {
-        String filePath = "";
-
+    private static boolean access(String id, String pw) {
         // open the file where is the user based on the first letter of the id
-        switch (i_id.charAt(0)) {
-            case 's':
-                filePath = "JSON/JsonFile/User/Students.json";
-                usersJsonArray = readJsonArrayFile(filePath);
-                break;
-            case 't':
-                filePath = "JSON/JsonFile/User/Teachers.json";
-                usersJsonArray = readJsonArrayFile(filePath);
-                break;
-            case 'p':
-                filePath = "JSON/JsonFile/User/Parents.json";
-                usersJsonArray = readJsonArrayFile(filePath);
-                break;
-            case 'a':
-                filePath = "JSON/JsonFile/User/Administrators.json";
-                usersJsonArray = readJsonArrayFile(filePath);
-                break;
-        }
+        usersJsonArray = switch (id.charAt(0)) {
+            case 's' -> readJsonArrayFile("JSON/JsonFile/User/Students.json");
+            case 't' -> readJsonArrayFile("JSON/JsonFile/User/Teachers.json");
+            case 'p' -> readJsonArrayFile("JSON/JsonFile/User/Parents.json");
+            default  -> readJsonArrayFile("JSON/JsonFile/User/Administrators.json");
+        };
 
         // Search in the file of the user type
         // if there is a user with id equal to what the user putted and the password equal to what the user putted
-        return verifyAccess(i_id, i_password);
+        return verifyAccess(id, pw);
     }
 
     /**
      * Search in the file of the user type
      * if there is a user with id equal to what the user putted and the password equal to what the user putted.
      */
-    private static boolean verifyAccess(String i_id, String i_password) {
+    private static boolean verifyAccess(String id, String pw) {
         // Search for every user id in file userJson
         // if there is one user that has the same id as i_id then check it's password
         // if the password doesn't match continue to search, else stop the search
@@ -692,8 +697,8 @@ public class Main {
             System.out.println(singleUser.get("password"));
 
             // Check if there is a user with id equal to i_id and password equal to i_password
-            if (Objects.equals((String) singleUser.get("id"), i_id) &&
-                    Objects.equals((String) singleUser.get("password"), i_password)) {
+            if (Objects.equals((String) singleUser.get("id"), id) &&
+                    Objects.equals((String) singleUser.get("password"), pw)) {
                 return true;
             }
         }

@@ -3,7 +3,7 @@ import org.json.simple.JSONObject;
 
 public class Admin {
 
-    private String userId;
+    protected String userId;
     public String getUserId() {
         return userId;
     }
@@ -11,7 +11,7 @@ public class Admin {
         this.userId = userId;
     }
 
-    private String name;
+    protected String name;
     public String getName() {
         return name;
     }
@@ -19,7 +19,7 @@ public class Admin {
         this.name = name;
     }
 
-    private String surname;
+    protected String surname;
     public String getSurname() {
         return surname;
     }
@@ -27,7 +27,7 @@ public class Admin {
         this.surname = surname;
     }
 
-    private String password;
+    protected String password;
     public String getPassword() {
         return password;
     }
@@ -35,7 +35,7 @@ public class Admin {
         this.password = password;
     }
 
-    private String[] address;
+    protected String[] address;
     public String[] getAddress() {
         return address;
     }

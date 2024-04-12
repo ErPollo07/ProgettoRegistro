@@ -1,6 +1,6 @@
 public class Teacher {
 
-    private String userId;
+    protected String userId;
     public String getUserId() {
         return userId;
     }
@@ -8,7 +8,7 @@ public class Teacher {
         this.userId = userId;
     }
 
-    private String name;
+    protected String name;
     public String getName() {
         return name;
     }
@@ -16,7 +16,7 @@ public class Teacher {
         this.name = name;
     }
 
-    private String surname;
+    protected String surname;
     public String getSurname() {
         return surname;
     }
@@ -24,7 +24,7 @@ public class Teacher {
         this.surname = surname;
     }
 
-    private String password;
+    protected String password;
     public String getPassword() {
         return password;
     }
@@ -32,7 +32,7 @@ public class Teacher {
         this.password = password;
     }
 
-    private String[] address;
+    protected String[] address;
     public String[] getAddress() {
         return address;
     }
@@ -40,7 +40,7 @@ public class Teacher {
         this.address = address;
     }
 
-    private String subject;
+    protected String subject;
     public String getSubject() {
         return subject;
     }
@@ -48,7 +48,7 @@ public class Teacher {
         this.subject = subject;
     }
 
-    private String[] classrooms;
+    protected String[] classrooms;
     public String[] getClassrooms() {
         return classrooms;
     }

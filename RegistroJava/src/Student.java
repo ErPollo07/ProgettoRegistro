@@ -3,7 +3,7 @@ import java.util.Map;
 
 public class Student {
 
-    private String userId;
+    protected String userId;
     public String getUserId() {
         return userId;
     }
@@ -11,7 +11,7 @@ public class Student {
         this.userId = userId;
     }
 
-    private String name;
+    protected String name;
     public String getName() {
         return name;
     }
@@ -19,7 +19,7 @@ public class Student {
         this.name = name;
     }
 
-    private String surname;
+    protected String surname;
     public String getSurname() {
         return surname;
     }
@@ -27,7 +27,7 @@ public class Student {
         this.surname = surname;
     }
 
-    private String password;
+    protected String password;
     public String getPassword() {
         return password;
     }
@@ -35,7 +35,7 @@ public class Student {
         this.password = password;
     }
 
-    private String[] address;
+    protected String[] address;
     public String[] getAddress() {
         return address;
     }
@@ -43,7 +43,7 @@ public class Student {
         this.address = address;
     }
 
-    private String classroom;
+    protected String classroom;
     public String getClassroom() {
         return classroom;
     }
@@ -51,7 +51,7 @@ public class Student {
         this.classroom = classroom;
     }
 
-    private String[] notes;
+    protected String[] notes;
     public String[] getNotes() {
         return notes;
     }
@@ -59,7 +59,7 @@ public class Student {
         this.notes = notes;
     }
 
-    private String parentId;
+    protected String parentId;
     public String getParentId() {
         return parentId;
     }
@@ -67,7 +67,7 @@ public class Student {
         this.parentId = parentId;
     }
 
-    private Map<String, List<Integer>> grades;
+    protected Map<String, List<Integer>> grades;
     public Map<String, List<Integer>> getGrades() {
         return grades;
     }
