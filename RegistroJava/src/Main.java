@@ -69,7 +69,6 @@ public class Main {
 
         // Variable for login
         String currentUserId, courrentUserPw;
-        boolean invalidLogin = false;
 
         boolean continueToUse = true;
 
@@ -86,9 +85,10 @@ public class Main {
 
         // Cycle until the user insert the correct id and the password.
         do {
+            incorrectValue = false;
             // Cycle until the user insert a correct id
             do {
-                System.out.println("inserisci il tuo username o id : ");
+                System.out.println("Inserisci il tuo username o id : ");
                 currentUserId = scanner.next().toLowerCase();
 
                 if (currentUserId.charAt(0) != 's' && currentUserId.charAt(0) != 't' &&
@@ -98,17 +98,17 @@ public class Main {
             } while (currentUserId.charAt(0) != 's' && currentUserId.charAt(0) != 't' &&
                     currentUserId.charAt(0) != 'p' && currentUserId.charAt(0) != 'a');
 
-            System.out.println("inserisci la tua password : ");
+            System.out.println("Inserisci la tua password : ");
             courrentUserPw = scanner.next();
 
             // Check if the id and password matches with access method
-            invalidLogin = access(currentUserId, courrentUserPw);
+            incorrectValue = access(currentUserId, courrentUserPw);
 
             // If the user inserts an incorrect id or password, tell him.
-            if (!invalidLogin) {
-                System.out.println("Hai inserito la password o l'username incorretti");
+            if (!incorrectValue) {
+                System.out.println("Hai inserito la password o l'username incorretti\nRiprova");
             }
-        } while (!invalidLogin);
+        } while (!incorrectValue);
 
         System.out.println("Accesso eseguito!");
 
