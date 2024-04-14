@@ -83,6 +83,9 @@ public class Main {
         String new_password = "";
         String subject = "";
 
+        // Variable view the list of teachers
+        String[] teachersList;
+
         // Cycle until the user insert the correct id and the password.
         do {
             incorrectValue = false;
@@ -135,7 +138,7 @@ public class Main {
         // load all user info
         loadUserInfo(currentUserId);
 
-        // Switch to
+
         switch (userType) {
             case UserType.student:
                 do {
@@ -181,7 +184,18 @@ public class Main {
                             // View the student of a classroom
                             break;
                         case 2:
-                            // View the list of teachers
+                            // View list of the teachers
+
+                            teachersList = admin.getTeachers(readJsonArrayFile("JSON/JsonFile/User/Teachers.json"));
+
+                            for (int i = 0; i < teachersList.length; i += 4) {
+                                System.out.println("Ecco la lista degli insegnanti registrati: ");
+                                System.out.println("\tId: " + teachersList[i]);
+                                System.out.println("\tNome: " + teachersList[i+1]);
+                                System.out.println("\tCognome: " + teachersList[i+2]);
+                                System.out.println("\tMateria: " + teachersList[i+3]);
+                            }
+
                             break;
                         case 3:
                             // Read the stuff json file
@@ -264,6 +278,7 @@ public class Main {
 
                                         if (classrooms[indexClassrooms].equals("q")) {
                                             continueToInsert = false;
+                                            classrooms[indexClassrooms] = "";
                                         } else if (classrooms[indexClassrooms].length() < 2) {
                                             System.out.println("Devi inserire la classe in questo formato <numero><sezione>.");
                                             incorrectValue = true;
@@ -277,6 +292,11 @@ public class Main {
                                             // If the classrooms array is full add another space
                                             if (classrooms.length == indexClassrooms) {
                                                 String[] arr = new String[classrooms.length + 1];
+
+                                                for (int i = 0; i < classrooms.length; i++) {
+                                                    arr[i] = classrooms[i];
+                                                }
+
                                                 classrooms = arr;
                                             }
                                         }

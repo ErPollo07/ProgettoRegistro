@@ -57,8 +57,22 @@ public class Admin {
      *
      * @return return the list of name and surname of all the teacher
      */
-    public String[] getTeachers() {
-        return new String[1];
+    public String[] getTeachers(JSONArray teachersJson) {
+        String[] teachersList = new String[teachersJson.size()*4];
+        int indexTeachers = 0;
+
+        for (Object teacherObj : teachersJson) {
+            JSONObject teacherJson = (JSONObject) teacherObj;
+
+            teachersList[indexTeachers] = (String) teacherJson.get("id");
+            teachersList[indexTeachers+1] = (String) teacherJson.get("name");
+            teachersList[indexTeachers+2] = (String) teacherJson.get("surname");
+            teachersList[indexTeachers+3] = (String) teacherJson.get("subject");
+
+            indexTeachers += 4;
+        }
+
+        return teachersList;
     }
 
     /**

@@ -1,17 +1,1 @@
-[
-  {
-    "password": "pw",
-    "address": {
-      "cap": "cap",
-      "city": "cityName",
-      "street": "streetName"
-    },
-    "surname": "surname",
-    "subject": "subject",
-    "name": "name",
-    "id": "t1",
-    "classrooms": [
-      "3E"
-    ]
-  }
-]
+[{}]
