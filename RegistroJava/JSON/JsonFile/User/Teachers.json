@@ -1,1 +1,28 @@
-[{}]
+[
+  {
+    "id": "idValue",
+    "password": "pw",
+    "name": "name",
+    "surname": "surname",
+    "address": {
+      "street": "streetName",
+      "city": "cityName",
+      "cap": "cap"
+    },
+    "subject": "subject",
+    "classes": ["3E", "4F", "1C"]
+  },
+  {
+    "id": "idValue2",
+    "password": "pwt2",
+    "name": "name2",
+    "surname": "surname2",
+    "address": {
+      "street": "streetName",
+      "city": "cityName",
+      "cap": "cap"
+    },
+    "subject": "subject2",
+    "classes": ["3E", "4F"]
+  }
+]

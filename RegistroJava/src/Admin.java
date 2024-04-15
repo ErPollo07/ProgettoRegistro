@@ -1,5 +1,9 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import java.util.List;
+import java.util.Map;
 
 public class Admin {
 
@@ -43,14 +47,6 @@ public class Admin {
         this.address = address;
     }
 
-    /**
-     * If I pass classroom = "3E", the method will return the list of name and surname of the students of the class 3E
-     *
-     * @return return the list of name and surname of the specified class
-     */
-    public String[] getClassStudents(String classroom) {
-        return new String[1];
-    }
 
     /**
      * This method allows you to view the list of the teachers in the school

@@ -1,5 +1,6 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONStreamAware;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -14,7 +15,6 @@ public class Main {
 
     static JSONArray usersJsonArray = new JSONArray(); // the file os users. Es: Students, Teachers, ...
     static JSONObject agendaJson = new JSONObject(); // the file of the agenda
-    static JSONObject classroomsJson = new JSONObject(); // the file of the classroom with all the students
     static JSONObject stuffJson = new JSONObject(); // the file which contains the stuff
 
     enum UserType {student, parent, teacher, admin}
@@ -85,6 +85,13 @@ public class Main {
 
         // Variable view the list of teachers
         String[] teachersList;
+
+        // Variable to view the list of students of a classroom
+        List<List<Map<String, String>>> classroomsList;
+        String selectedClassroom;
+        JSONObject classroomsArray;
+        JSONArray studentsArray;
+
 
         // Cycle until the user insert the correct id and the password.
         do {
@@ -180,16 +187,40 @@ public class Main {
                 // Cycle until the user wants to exit
                 do {
                     switch (printMenu(adminPrincipalMenu)) {
+                        // View the student of a classroom
                         case 1:
-                            // View the student of a classroom
+                            classroomsArray = readJsonObjectFile("JSON/JsonFile/Classrooms.json");
+
+                            do {
+                                System.out.println("Inserisci quale classe vuoi vedere l'elenco studenti: ");
+                                selectedClassroom = scanner.next();
+
+                                studentsArray = (JSONArray) classroomsArray.get(selectedClassroom);
+
+                                if (studentsArray == null)
+                                    System.out.println("ATTENZIONE: La classe non e' presente. Riprova");
+                            } while (studentsArray == null);
+
+                            System.out.println("Ecco l'elenco degli studenti in " + selectedClassroom);
+                            for (Object s : studentsArray) {
+                                JSONObject student = (JSONObject) s;
+
+                                System.out.printf(" Id: %s | Nome: %s | Cognome: %s\n",
+                                        student.get("id"), student.get("name"), student.get("surname"));
+                            }
+
+                            System.out.println();
+
                             break;
+                        // View list of the teachers
                         case 2:
-                            // View list of the teachers
 
                             teachersList = admin.getTeachers(readJsonArrayFile("JSON/JsonFile/User/Teachers.json"));
 
+                            System.out.println("Ecco la lista degli insegnanti registrati: ");
+
                             for (int i = 0; i < teachersList.length; i += 4) {
-                                System.out.println("Ecco la lista degli insegnanti registrati: ");
+                                System.out.println("Info dell'insegnante " + (i+1));
                                 System.out.println("\tId: " + teachersList[i]);
                                 System.out.println("\tNome: " + teachersList[i+1]);
                                 System.out.println("\tCognome: " + teachersList[i+2]);
@@ -197,6 +228,7 @@ public class Main {
                             }
 
                             break;
+                        // Create a new user
                         case 3:
                             // Read the stuff json file
                             stuffJson = readJsonObjectFile("JSON/JsonFile/stuff.json");
